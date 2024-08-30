@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from "./Authentication/Login";
-import Register from "./Authentication/Register";
+import Register from "./Authentication/Registration";
 import ForgotPass from "./Authentication/ForgotPass";
 import ResetPass from "./Authentication/ResetPass";
 
