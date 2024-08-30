@@ -1,0 +1,29 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap");
+
+html,
+body,
+#root,
+.app,
+.content {
+  height: 100%;
+  width: 100%;
+  font-family: "Source Sans Pro", sans-serif;
+
+}
+
+.app {
+  display: flex;
+  position: relative;
+  height: 100vh;
+  background-color:cornflowerblue;
+}
+
+
+
+.content {
+  
+  flex: 1; /* Allow content to take remaining space */
+  position: relative; /* Make sure content doesn't affect Topbar positioning */
+  overflow-y: auto; /* Allow scrolling if content overflows */
+
+}
