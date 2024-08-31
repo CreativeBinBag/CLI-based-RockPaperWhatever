@@ -3,7 +3,7 @@ import { Box, Typography, Button, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import { DataGrid } from '@mui/x-data-grid';
-import { AuthContext } from '../../../context/AuthProvider';
+import { AuthContext } from '../AuthProvider';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
