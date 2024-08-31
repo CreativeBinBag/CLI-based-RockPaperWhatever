@@ -3,9 +3,8 @@ import { Link } from 'react-router-dom';
 import { Stack, Box, Typography, TextField, Button, IconButton, Alert, InputAdornment } from '@mui/material';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
-
-//import { AuthContext } from "../context/AuthProvider";
-//import api from "../Admin/api/axios";
+import api from "../api/axios";
+import { AuthContext } from "../AuthProvider";
 
 // Regex for validation
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
@@ -15,7 +14,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const Register = () => {
   const userRef = useRef();
   const errRef = useRef();
- // const { login } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
 
   // State for username
   const [user, setUser] = useState('');
@@ -67,7 +66,7 @@ const Register = () => {
   }, [user, pwd, matchPwd, email]);
 
   const handleSubmit = async (e) => {
- /*   e.preventDefault();
+    e.preventDefault();
 
     if (!validName || !validPwd || !validMatch || !validEmail) {
       setErrMsg("Invalid Entry");
@@ -82,7 +81,7 @@ const Register = () => {
       });
 
       if (response.status === 201) {
-  //      await login(user, pwd);
+        await login(user, pwd);
         setSuccess(true);
         setUser('');
         setPwd('');
@@ -99,7 +98,7 @@ const Register = () => {
         setErrMsg('Registration Failed');
       }
       errRef.current.focus();
-    } */
+    } 
   };
 
   return (

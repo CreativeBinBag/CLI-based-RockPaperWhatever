@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Typography, TextField, Button, Box, Snackbar, Alert } from '@mui/material';
-// import api from '../Admin/api/axios';
-
+import api from '../api/axios';
 const ResetPass = () => {
   const { token } = useParams();
   const [password, setPassword] = useState('');
@@ -12,7 +11,7 @@ const ResetPass = () => {
 
 
   const handleSubmit = async (e) => {
-   /* e.preventDefault();
+    e.preventDefault();
     try {
       const response = await api.post(`/users/reset-password/${token}`, { password });
       setMessage(response.data);
@@ -23,7 +22,7 @@ const ResetPass = () => {
       setError('Error resetting password');
       setMessage('');
       setOpenSnackbar(true);
-    } */
+    } 
   };
 
   return (

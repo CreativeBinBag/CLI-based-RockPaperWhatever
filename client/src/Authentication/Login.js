@@ -1,13 +1,13 @@
 import { useRef, useState, useEffect, useContext } from 'react';
 import { Link, useNavigate} from 'react-router-dom';
-//import { AuthContext } from '../context/AuthProvider';
+import { AuthContext } from '../AuthProvider';
 import { TextField, Button, Typography, Container, Box, Alert } from '@mui/material';
 import { blue } from '@mui/material/colors';
 
 
 const Login = () => {
 
- // const { login, auth } = useContext(AuthContext);
+  const { login, auth } = useContext(AuthContext);
   const userRef = useRef();
   const errRef = useRef();
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-   //   await login(user, pwd);
+      await login(user, pwd);
       setSuccess(true);
       setUser('');
       setPwd('');

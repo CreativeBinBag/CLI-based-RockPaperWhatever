@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Container, Typography, TextField, Button, Box, Snackbar, Alert } from '@mui/material';
-//import api from '../Admin/api/axios';
-
+import api from '../api/axios';
 const ForgotPass = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -9,7 +8,7 @@ const ForgotPass = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const handleSubmit = async (e) => {
- /*   e.preventDefault();
+    e.preventDefault();
     try {
      const response = await api.post('/users/forgot-password', { email });
       setMessage(response.data);
@@ -19,7 +18,7 @@ const ForgotPass = () => {
       setError('Error sending password reset email');
       setMessage('');
       setOpenSnackbar(true);
-    } */
+    } 
   };
 
   return (
