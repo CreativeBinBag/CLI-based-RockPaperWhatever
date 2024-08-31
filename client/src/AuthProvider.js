@@ -47,6 +47,8 @@ export const AuthProvider = ({ children }) => {
         password,
       }, { withCredentials: true });
 
+      console.log('Login response:', response);
+
       if (response.status === 200) {
         setAuth(response.data);
       } else {

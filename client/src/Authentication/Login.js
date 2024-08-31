@@ -46,6 +46,7 @@ const Login = () => {
       setPwd('');
     
     } catch (error) {
+      console.error('Login error:', error);
       setErrMsg('Login Failed');
       errRef.current.focus();
     }
