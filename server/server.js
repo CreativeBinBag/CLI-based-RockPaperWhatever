@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 10000
 const app = express()
 
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000', // Use environment variable for client URL
+  origin: 'https://cli-based-rockpaperwhatever-nafisa-rafas-projects.vercel.app/', // Use environment variable for client URL
   credentials: true
 }));
 

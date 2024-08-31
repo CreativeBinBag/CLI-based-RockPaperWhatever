@@ -225,6 +225,8 @@ const updateUserRole = async (req, res) => {
 };
 
 const checkAuthStatus = async (req, res) => {
+  console.log("Reached checkAuthStatus");
+
   try {
     const token = req.cookies.jwt;
 

@@ -9,6 +9,7 @@ const authenticateUser = async (req, res, next) => {
 
     if (!token && refreshToken) {
       // Verify and refresh the access token using the refresh token
+      console.log("No access token, attempting to use refresh token...");
       const decoded = jwt.verify(refreshToken, process.env.refreshSecretKey);
       const user = await User.findByPk(decoded.id);
 
@@ -19,16 +20,19 @@ const authenticateUser = async (req, res, next) => {
         return res.status(401).send('Unauthorized');
       }
     } else if (!token) {
+      console.log("No tokens provided, unauthorized.");
       return res.status(401).send('Unauthorized');
     }
 
     // Verify the token
+    console.log("Verifying token...");
     const decoded = jwt.verify(token, process.env.secretKey);
     const user = await User.findByPk(decoded.id);
 
     if (!user || user.status === 'blocked') {
       return res.status(user ? 403 : 401).json({ message: user ? 'Your account has been blocked.' : 'Unauthorized' });
     }
+    console.log("Token valid, user authenticated:", user);
 
     req.user = user;
     next();
