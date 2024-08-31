@@ -25,15 +25,15 @@ const Login = () => {
     setErrMsg('');
   }, [user, pwd]);
 
- /* useEffect(() => {
+ useEffect(() => {
     if (success) {
       if (auth?.role === 'admin') {
-        navigate('/manage-users'); 
-      } else {
         navigate('/'); 
+      } else {
+        navigate('/login'); 
       }
     }
-  }, [success, auth, navigate]); */
+  }, [success, auth, navigate]); 
 
 
   const handleSubmit = async (e) => {
