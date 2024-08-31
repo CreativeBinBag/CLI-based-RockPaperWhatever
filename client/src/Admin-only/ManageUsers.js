@@ -8,7 +8,7 @@ import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettin
 import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import api from '../api/axios';
-import ConfirmDeleteDialog from '../../components/ConfirmDeleteDialog';
+import ConfirmDeleteDialog from './ConfirmDeleteDialog';
 const ManageUsers = () => {
 
    
