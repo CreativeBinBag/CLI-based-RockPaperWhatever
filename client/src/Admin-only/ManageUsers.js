@@ -22,7 +22,7 @@ const ManageUsers = () => {
   useEffect(() => {
     const getUsers = async () => {
       try {
-        const { data } = await api.get('/users/manage-users');
+        const { data } = await api.get('/api/users/manage-users');
         setUsers(data.map((user) => ({ ...user, id: user.id })));
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -38,7 +38,7 @@ const ManageUsers = () => {
       return;
     }
     try {
-      let url = `/users/${id}`;
+      let url = `/api/users/${id}`;
       const body = {};
 
       if (action === 'block' || action === 'unblock') {
@@ -67,7 +67,7 @@ const ManageUsers = () => {
         }));
 
         if (action === 'demote' && id === auth.id) {
-          api.post('/users/logout');
+          api.post('/api/users/logout');
           navigate('/login');
         }
       }
@@ -78,7 +78,7 @@ const ManageUsers = () => {
 
   const handleConfirmDelete = async () => {
     try {
-      await api.delete(`/users/${deleteUserId}/delete`);
+      await api.delete(`/api/users/${deleteUserId}/delete`);
       setUsers(users.filter(user => user.id !== deleteUserId));
       setConfirmDeleteOpen(false);
       setDeleteUserId(null);

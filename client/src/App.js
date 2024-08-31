@@ -15,8 +15,13 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPass/>} />
           <Route path="/reset-password/:token" element={<ResetPass />} />
-
-
+        
+            {/* Admin-only protected routes with sidebar/topbar */}
+        <Route element={<PrivateRoute adminOnly={true} />}>
+        <Route element={<Layout />}>
+          <Route path="/manage-users" element={<ManageUsers />} />
+        </Route>
+      </Route>
 
         </Routes>
       </Router>
