@@ -28,7 +28,7 @@ const Login = () => {
  useEffect(() => {
     if (success) {
       if (auth?.role === 'admin') {
-        navigate('/'); 
+        navigate('/manage-users'); 
       } else {
         navigate('/login'); 
       }
