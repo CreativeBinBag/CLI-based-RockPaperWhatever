@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import TerminalComponent from './TerminalComponent';
+import TerminalComponent from '../Terminal';
 import { getHelpTable } from './helpTable';
 import { generateKey, calculateHMAC } from './generateKey';
 import { determineWinner, isValidArgs, getComputerMove } from './gameLogic';
