@@ -25,6 +25,14 @@ app.use(cors({
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
+app.use(bodyParser.json())
+
+
+db.sequelize.sync().then(() => {
+  console.log("db synced")
+});
+
+app.use('/api/users', userRoutes);
 
 //listening to server connection
 app.listen(PORT,'0.0.0.0', () => console.log(`Server is connected on ${PORT}`))
