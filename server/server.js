@@ -6,7 +6,7 @@ const db = require ('./index')
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const { sequelize } = require('.');
-const userRoutes = require('./Routes/userRoutes')
+const userRoutes = require('./Routes/userRoute')
 
 
 //setting up your port
