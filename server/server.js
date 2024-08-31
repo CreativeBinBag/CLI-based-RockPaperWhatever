@@ -16,10 +16,9 @@ const PORT = process.env.PORT || 10000
 const app = express()
 
 app.use(cors({
-  origin: 'https://cli-based-rockpaperwhatever-nafisa-rafas-projects.vercel.app/', // Use environment variable for client URL
+  origin: 'https://cli-based-rockpaperwhatever-nafisa-rafas-projects.vercel.app', // Use environment variable for client URL
   credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+
 }));
 
 //middleware
