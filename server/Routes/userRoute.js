@@ -1,7 +1,7 @@
 const express = require('express');
-const {register,login, pwdResetReq, pwdReset, logout, getAllUsers, toggleBlockUser, deleteUser, updateUserRole, checkAuthStatus} = require('../controller/userController');
-const userAuth = require('../Middleware/userAuth');
-const {authenticateUser, authorizeAdmin} = require('../Middleware/privileges');
+const {register,login, pwdResetReq, pwdReset, logout, getAllUsers, toggleBlockUser, deleteUser, updateUserRole, checkAuthStatus} = require('../Controllers/userController');
+const userAuth = require('../Middleware/verifyAuth');
+const {authenticateUser, authorizeAdmin} = require('../Middleware/authorize');
 
 
 const router = express.Router()
