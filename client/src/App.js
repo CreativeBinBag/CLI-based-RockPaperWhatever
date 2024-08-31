@@ -7,7 +7,7 @@ import ResetPass from "./Authentication/ResetPass";
 import PrivateRoute from "./PrivateRoute";
 import ManageUsers from "./Admin-only/ManageUsers";
 import Layout from "./Layout";
-import gameContainer from "./CLI/container/gameContainer";
+import GameContainer from "./CLI/container/gameContainer";
 
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
         </Route>
       </Route>
 
-      <Route path="/game" element={<gameContainer />} />
+      <Route path="/game" element={<GameContainer />} />
 
 
         </Routes>
