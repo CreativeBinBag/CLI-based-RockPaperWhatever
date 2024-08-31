@@ -7,7 +7,7 @@ import { blue } from '@mui/material/colors';
 
 const Login = () => {
 
-  const { login, auth } = useContext(AuthContext);
+  const { login, auth, checkAdmin } = useContext(AuthContext);
   const userRef = useRef();
   const errRef = useRef();
   const navigate = useNavigate();
@@ -69,11 +69,15 @@ const Login = () => {
         }}
        >
       {success ? (
-          <Box>
-          <Typography variant="h5">You are logged in!</Typography>
-          <br />
-          <Link to="/logout">Logout</Link> {/*link for now, change later to cli*/}
-        </Box>
+         auth && !checkAdmin ? (
+          <Button component={Link} to="/game" variant="contained">
+            Go to Game
+          </Button>
+        ) : (
+          <Button component={Link} to="/manage-users" variant="contained">
+            Manage Users
+          </Button>
+        )
       ) : (
         <Box
         sx={{
