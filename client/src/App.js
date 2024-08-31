@@ -4,6 +4,9 @@ import Login from "./Authentication/Login";
 import Register from "./Authentication/Registration";
 import ForgotPass from "./Authentication/ForgotPass";
 import ResetPass from "./Authentication/ResetPass";
+import PrivateRoute from "./PrivateRoute";
+import ManageUsers from "./Admin-only/ManageUsers";
+import Layout from "./Layout";
 
 
 function App() {
