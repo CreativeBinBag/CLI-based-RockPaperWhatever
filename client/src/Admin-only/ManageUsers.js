@@ -92,13 +92,13 @@ const ManageUsers = () => {
   };
 
   const columns = [
-    { field: 'userName', headerName: t('name'), flex: 1, cellClassName: 'name-column--cell', headerAlign: 'center',
+    { field: 'userName', headerName:'Name', flex: 1, cellClassName: 'name-column--cell', headerAlign: 'center',
       align: 'center' },
-    { field: 'email', headerName: t('email'), flex: 1, headerAlign: 'center',
+    { field: 'email', headerName: 'Email', flex: 1, headerAlign: 'center',
       align: 'center'},
     {
       field: 'role',
-      headerName: t('access'),
+      headerName: 'Access',
       headerAlign: 'center',
       align: 'center',
       flex: 2,
@@ -126,7 +126,7 @@ const ManageUsers = () => {
     },
     {
       field: 'actions',
-      headerName: t('actions'),
+      headerName: 'Actions',
       headerAlign: 'center',
       align: 'center',
       flex: 2,
@@ -138,13 +138,13 @@ const ManageUsers = () => {
               variant="contained"
               onClick={() => handleAction(row.id, row.status === 'blocked' ? 'unblock' : 'block')}
             >
-              {row.status === 'blocked' ? t('unblock') : t('block')}
+              {row.status === 'blocked' ? 'unblock' : 'block'}
             </Button>
             <Button
               variant="contained"
               onClick={() => handleAction(row.id, row.role === 'user' ? 'promote' : 'demote')}
             >
-              {row.role === 'user' ? t('promoteToAdmin') :t('removeFromAdmin')}
+              {row.role === 'user' ? 'Promote To Admin' : 'Remove From Admin'}
             </Button>
             <Button
               sx={{
@@ -154,7 +154,7 @@ const ManageUsers = () => {
               startIcon={<DeleteIcon />}
               onClick={() => handleAction(row.id, 'delete')}
             >
-              {t('delete')}
+              Delete
             </Button>
           </Stack>
         </Box>
@@ -164,7 +164,6 @@ const ManageUsers = () => {
 
   return (
     <Box m="8px" position="fixed" width="80%">
-      <Header title= {t('userList')} subtitle={t('manageUsersofcollectionapp')} />
       <Box m="40px 0 0 0" height="70vh" sx={{
         "& .MuiDataGrid-root": {
           border: "none",
