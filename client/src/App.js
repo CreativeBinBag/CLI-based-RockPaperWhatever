@@ -7,6 +7,7 @@ import ResetPass from "./Authentication/ResetPass";
 import PrivateRoute from "./PrivateRoute";
 import ManageUsers from "./Admin-only/ManageUsers";
 import Layout from "./Layout";
+import gameContainer from "./CLI/container/gameContainer";
 
 
 function App() {
@@ -25,6 +26,9 @@ function App() {
           <Route path="/manage-users" element={<ManageUsers />} />
         </Route>
       </Route>
+
+      <Route path="/game" element={<gameContainer />} />
+
 
         </Routes>
       </Router>

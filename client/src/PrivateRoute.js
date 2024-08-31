@@ -18,8 +18,8 @@ const PrivateRoute = ({ adminOnly = false }) => {
   }
 
   if (adminOnly && !checkAdmin()) {
-    console.log('Redirecting to home because not admin');
-    return <Navigate to="/" />;
+    console.log('Redirecting to game if not admin');
+    return <Navigate to="/game" />;
   }
 
   console.log('Rendering Outlet');
