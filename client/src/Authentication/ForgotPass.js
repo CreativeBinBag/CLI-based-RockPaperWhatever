@@ -10,7 +10,7 @@ const ForgotPass = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-     const response = await api.post('/users/forgot-password', { email });
+     const response = await api.post('/api/users/forgot-password', { email });
       setMessage(response.data);
       setError('');
       setOpenSnackbar(true);

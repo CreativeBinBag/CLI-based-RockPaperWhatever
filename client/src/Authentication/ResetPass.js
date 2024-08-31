@@ -13,7 +13,7 @@ const ResetPass = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post(`/users/reset-password/${token}`, { password });
+      const response = await api.post(`/api/users/reset-password/${token}`, { password });
       setMessage(response.data);
       setError('');
       setOpenSnackbar(true);
