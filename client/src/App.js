@@ -7,6 +7,7 @@ import ResetPass from "./Authentication/ResetPass";
 import PrivateRoute from "./PrivateRoute";
 import ManageUsers from "./Admin-only/ManageUsers";
 import Layout from "./Layout";
+import GameTerminal from "./GameTerminal/GameTerminal";
 
 
 function App() {
@@ -25,6 +26,11 @@ function App() {
           <Route path="/manage-users" element={<ManageUsers />} />
         </Route>
       </Route>
+
+      <Route element={<PrivateRoute />}>
+        <Route path="/game" element={<GameTerminal />} />
+      </Route>
+
 
 
         </Routes>
