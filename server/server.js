@@ -5,7 +5,6 @@ const db = require ('./index')
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const { sequelize } = require('.');
-const stripAnsi = require('strip-ansi');
 const userRoutes = require('./Routes/userRoute')
 const { spawn } = require('child_process'); // Import for spawning child processes
 const WebSocket = require('ws'); // Import for WebSocket
