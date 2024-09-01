@@ -1,25 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Terminal } from 'xterm';
 import 'xterm/css/xterm.css';
 
 const GameTerminal = () => {
+    const [ws, setWs] = useState(null); // Initialize WebSocket state
+
     useEffect(() => {
-        const ws = new WebSocket('wss://cli-based-rockpaperwhateverbackend-cmow.onrender.com');
+        // Create a new WebSocket connection
+        const websocket = new WebSocket('wss://cli-based-rockpaperwhateverbackend-cmow.onrender.com');
+        setWs(websocket); // Set the WebSocket instance to state
+
         const terminal = new Terminal();
         terminal.open(document.getElementById('terminal'));
 
         let inputBuffer = '';
 
-        ws.onopen = () => {
+        websocket.onopen = () => {
             console.log('WebSocket connection opened');
         };
 
-        ws.onmessage = (event) => {
+        websocket.onmessage = (event) => {
             console.log('Message received from server:', event.data);
             terminal.writeln(event.data);
         };
 
-        ws.onerror = (error) => {
+        websocket.onerror = (error) => {
             console.error('WebSocket error:', error);
         };
 
@@ -27,7 +32,8 @@ const GameTerminal = () => {
             // Accumulate input data
             if (data.charCodeAt(0) === 13) { // Enter key (newline)
                 if (inputBuffer.trim()) {
-                    ws.send(inputBuffer.trim()); // Send the complete input
+                    console.log('Sending data to server:', inputBuffer.trim());
+                    websocket.send(inputBuffer.trim()); // Send the complete input
                 }
                 inputBuffer = ''; // Clear the buffer
             } else if (data.charCodeAt(0) === 8) { // Backspace key
@@ -41,11 +47,14 @@ const GameTerminal = () => {
 
         return () => {
             console.log('WebSocket connection closed');
-            ws.close();
+            if (ws) {
+                ws.close(); // Close the WebSocket connection when component unmounts
+            }
         };
-    }, []);
+    }, [ws]); // Dependency array ensures cleanup if ws changes
 
     return <div id="terminal" style={{ width: '100%', height: '500px' }} />;
 };
 
 export default GameTerminal;
+
