@@ -49,14 +49,19 @@ wss.on('connection', (ws) => {
     console.log('Client connected');
 
     let moves = [];
+    let gameProcess = null;
 
     ws.on('message', (message) => {
+        // Handle the initial message with moves
         if (Array.isArray(message)) {
             moves = message; // Assuming moves are sent as an array
             console.log('Moves received:', moves);
 
-            // Spawn the game process with dynamic moves
-            const gameProcess = spawn('node', ['game.js', ...moves]);
+            // Start the game process
+            if (gameProcess) {
+                gameProcess.kill(); // Kill the old process if it exists
+            }
+            gameProcess = spawn('node', ['game.js', ...moves]);
 
             gameProcess.stdout.on('data', (data) => {
                 ws.send(data.toString());
@@ -65,21 +70,18 @@ wss.on('connection', (ws) => {
             gameProcess.stderr.on('data', (data) => {
                 console.error(`Game error: ${data}`);
             });
-
-            ws.on('message', (message) => {
-                gameProcess.stdin.write(`${message}\n`);
-            });
-
-            ws.on('close', () => {
-                console.log('Client disconnected');
-                gameProcess.kill();
-            });
         } else {
-            // Handle other types of messages, such as user moves
-            if (moves.length > 0) {
-                const gameProcess = spawn('node', ['game.js', ...moves]);
+            // Handle user moves
+            if (gameProcess) {
                 gameProcess.stdin.write(`${message}\n`);
             }
+        }
+    });
+
+    ws.on('close', () => {
+        console.log('Client disconnected');
+        if (gameProcess) {
+            gameProcess.kill();
         }
     });
 });
