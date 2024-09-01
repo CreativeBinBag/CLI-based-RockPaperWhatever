@@ -23,7 +23,7 @@ console.log(`HMAC: ${hmac}`);
 
 const generateHelpTable = (moves) => {
     const half = Math.floor(moves.length / 2);
-    const colWidth = 20; // Adjust this width based on your longest move and padding needs
+    const colWidth = 5; // Adjust this width based on your longest move and padding needs
     const separator = `+${'-'.repeat(colWidth * moves.length + moves.length + 1)}+\n`;
     let table = `\n${separator}`;
 
