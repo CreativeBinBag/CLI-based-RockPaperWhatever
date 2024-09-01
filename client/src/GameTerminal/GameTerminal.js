@@ -1,3 +1,8 @@
+import React, { useEffect, useState } from 'react';
+import { Terminal } from 'xterm';
+import 'xterm/css/xterm.css';
+
+
 const GameTerminal = () => {
   const [ws, setWs] = useState(null);
 
