@@ -8,8 +8,7 @@ if (moves.length < 3 || moves.length % 2 === 0) {
     process.exit(1);
 }
 
-function playRound() {
-
+// Generate a cryptographic key
 const key = crypto.randomBytes(32).toString('hex');
 
 // Randomly select a move for the computer
@@ -19,12 +18,7 @@ const computerMove = moves[Math.floor(Math.random() * moves.length)];
 const hmac = crypto.createHmac('sha256', key).update(computerMove).digest('hex');
 
 // Display the HMAC to the user
-console.log(`\nHMAC: ${hmac}`);
-
-console.log('Please enter your move:');
-
-process.stdin.removeAllListeners('data');
-
+console.log(`HMAC: ${hmac}`);
 
 process.stdin.on('data', (data) => {
         const userMove = data.toString().trim();
@@ -34,24 +28,24 @@ process.stdin.on('data', (data) => {
         const half = Math.floor(moves.length / 2);
 
         if (userIndex === computerIndex) {
-            console.log("Draw!");
+            console.log("\nDraw!");
+            process.stdout.write('\n');
         } else if ((computerIndex > userIndex && computerIndex - userIndex <= half) ||
                    (userIndex > computerIndex && userIndex - computerIndex > half)) {
-            console.log("Computer Wins!");
-            
+            console.log("\nComputer Wins!");
+            process.stdout.write('\n');
+
         } else {
-            console.log("You Win!");
+            console.log("\nYou Win!");
+            process.stdout.write('\n');
         }
 
         console.log(`\nComputer move: ${computerMove}`);
         console.log(`\nKey: ${key}`);
-
+        process.stdout.write('\n');
         process.exit(0);
     } else {
-        console.log("Invalid input. Please select a valid move.");
+        console.log("\nInvalid input. Please select a valid move.");
+        process.stdout.write('\n');
     }
 });
-
-}
-
-playRound();
