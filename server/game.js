@@ -20,46 +20,59 @@ const hmac = crypto.createHmac('sha256', key).update(computerMove).digest('hex')
 // Display the HMAC to the user
 console.log(`HMAC: ${hmac}`);
 
-// Generate and display the help table
 const generateHelpTable = (moves) => {
     const half = Math.floor(moves.length / 2);
-    console.log("\nHelp Table:");
+    let table = `\n+${'-'.repeat(moves.length * 8 + 1)}+\n`;
+    table += `|          |${moves.map(move => `  ${move}  |`).join('')}\n`;
+    table += `+${'-'.repeat(moves.length * 8 + 1)}+\n`;
+
     moves.forEach((move, i) => {
-        const beats = [];
-        for (let j = 1; j <= half; j++) {
-            beats.push(moves[(i + j) % moves.length]);
-        }
-        console.log(`${i + 1}. ${move} beats ${beats.join(', ')}`);
+        let row = `|  ${move.padEnd(8)}|`;
+        moves.forEach((_, j) => {
+            if (i === j) {
+                row += `  \x1b[33mDraw\x1b[0m  |`;
+            } else if ((j > i && j - i <= half) || (i > j && i - j > half)) {
+                row += `  \x1b[31mLose\x1b[0m  |`;
+            } else {
+                row += `  \x1b[32mWin \x1b[0m  |`;
+            }
+        });
+        row += `\n+${'-'.repeat(moves.length * 8 + 1)}+\n`;
+        table += row;
     });
-    console.log('4. Help table\n5. Exit\n');
+
+    return table;
 };
 
-generateHelpTable(moves);
+console.log("Available moves:");
+moves.forEach((move, index) => {
+    console.log(`${index + 1} - ${move}`);
+});
+console.log("0 - exit");
+console.log("? - help table");
 
 process.stdin.on('data', (data) => {
     const userMove = data.toString().trim();
-    if (moves.includes(userMove)) {
+    if (userMove === '?') {
+        console.log(generateHelpTable(moves));
+    } else if (moves.includes(userMove)) {
         const userIndex = moves.indexOf(userMove);
         const computerIndex = moves.indexOf(computerMove);
         const half = Math.floor(moves.length / 2);
 
         if (userIndex === computerIndex) {
-            console.log("\nDraw!");
+            console.log("It's a draw!");
         } else if ((computerIndex > userIndex && computerIndex - userIndex <= half) ||
                    (userIndex > computerIndex && userIndex - computerIndex > half)) {
-            console.log("\nComputer Wins!");
+            console.log("Computer Wins!");
         } else {
-            console.log("\nYou Win!");
+            console.log("You Win!");
         }
 
-        console.log(`\nComputer move: ${computerMove}`);
-        console.log(`\nKey: ${key}`);
-        process.exit(0);
-    } else if (userMove.toLowerCase() === 'help table') {
-        generateHelpTable(moves);
-    } else if (userMove.toLowerCase() === 'exit') {
+        console.log(`Computer move: ${computerMove}`);
+        console.log(`HMAC key: ${key}`);
         process.exit(0);
     } else {
-        console.log("\nInvalid input. Please select a valid move.");
+        console.log("Invalid input. Please select a valid move.");
     }
 });
