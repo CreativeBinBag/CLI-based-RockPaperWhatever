@@ -23,8 +23,8 @@ console.log(`HMAC: ${hmac}`);
 
 const generateHelpTable = (moves) => {
     const half = Math.floor(moves.length / 2);
-    const colWidth = 10; // Adjust this width based on your longest move and padding needs
-    const separator = `+${'-'.repeat(colWidth * moves.length + moves.length + 1)}+\n`;
+    const colWidth = 12; // Adjusted for better alignment
+    const separator = `+${'-'.repeat(colWidth * (moves.length + 1) + moves.length + 1)}+\n`;
     let table = `\n${separator}`;
 
     // Header row
@@ -39,11 +39,11 @@ const generateHelpTable = (moves) => {
         let row = `| ${move.padEnd(colWidth - 1)}|`;
         moves.forEach((_, j) => {
             if (i === j) {
-                row += ` ${'\x1b[33mDraw\x1b[0m'.padEnd(colWidth)}|`;
+                row += ` ${'\x1b[33mDraw\x1b[0m'.padEnd(colWidth - 1)}|`;
             } else if ((j > i && j - i <= half) || (i > j && i - j > half)) {
-                row += ` ${'\x1b[31mLose\x1b[0m'.padEnd(colWidth)}|`;
+                row += ` ${'\x1b[31mLose\x1b[0m'.padEnd(colWidth - 1)}|`;
             } else {
-                row += ` ${'\x1b[32mWin\x1b[0m'.padEnd(colWidth)}|`;
+                row += ` ${'\x1b[32mWin\x1b[0m'.padEnd(colWidth - 1)}|`;
             }
         });
         row += `\n${separator}`;
@@ -52,7 +52,6 @@ const generateHelpTable = (moves) => {
 
     return table;
 };
-
 
 // Available moves display
 console.log("Available moves:");
