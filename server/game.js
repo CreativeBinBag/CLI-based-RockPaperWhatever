@@ -1,6 +1,9 @@
 const crypto = require('crypto');
 const readline = require('readline');
 
+// Validate the moves passed as command line arguments
+const moves = process.argv.slice(2);
+
 
 // Generate a cryptographic key
 const key = crypto.randomBytes(32).toString('hex');
