@@ -4,7 +4,7 @@ import 'xterm/css/xterm.css';
 
 const GameTerminal = () => {
     useEffect(() => {
-        const ws = new WebSocket('wss://cli-based-rockpaperwhateverbackend-fzp2.onrender.com');
+        const ws = new WebSocket('wss://cli-based-rockpaperwhateverbackend-cmow.onrender.com');
         const terminal = new Terminal();
         terminal.open(document.getElementById('terminal'));
 
