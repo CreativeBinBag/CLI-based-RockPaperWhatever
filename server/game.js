@@ -1,10 +1,11 @@
 const crypto = require('crypto');
+const readline = require('readline');
 
 // Validate the moves passed as command line arguments
 const moves = process.argv.slice(2);
 if (moves.length < 3 || moves.length % 2 === 0) {
     console.error("Error: Please provide an odd number (≥ 3) of non-repeating moves.");
-    console.error("Example: node game.js Rock Paper Scissors");
+    console.error("Example: node game.js rock paper scissors");
     process.exit(1);
 }
 
@@ -23,7 +24,7 @@ console.log(`HMAC: ${hmac}`);
 const generateHelpTable = (moves) => {
     const half = Math.floor(moves.length / 2);
     let table = `\n+${'-'.repeat(moves.length * 8 + 1)}+\n`;
-    table += `|          |${moves.map(move => `  ${move}  |`).join('')}\n`;
+    table += `|          |${moves.map(move => `  ${move.padEnd(6)} |`).join('')}\n`;
     table += `+${'-'.repeat(moves.length * 8 + 1)}+\n`;
 
     moves.forEach((move, i) => {
@@ -44,6 +45,7 @@ const generateHelpTable = (moves) => {
     return table;
 };
 
+// Available moves display
 console.log("Available moves:");
 moves.forEach((move, index) => {
     console.log(`${index + 1} - ${move}`);
@@ -51,28 +53,43 @@ moves.forEach((move, index) => {
 console.log("0 - exit");
 console.log("? - help table");
 
-process.stdin.on('data', (data) => {
-    const userMove = data.toString().trim();
-    if (userMove === '?') {
-        console.log(generateHelpTable(moves));
-    } else if (moves.includes(userMove)) {
-        const userIndex = moves.indexOf(userMove);
-        const computerIndex = moves.indexOf(computerMove);
-        const half = Math.floor(moves.length / 2);
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 
-        if (userIndex === computerIndex) {
-            console.log("It's a draw!");
-        } else if ((computerIndex > userIndex && computerIndex - userIndex <= half) ||
-                   (userIndex > computerIndex && userIndex - computerIndex > half)) {
-            console.log("Computer Wins!");
-        } else {
-            console.log("You Win!");
-        }
-
-        console.log(`Computer move: ${computerMove}`);
-        console.log(`HMAC key: ${key}`);
+rl.on('line', (input) => {
+    if (input === '0') {
+        console.log('Exiting game...');
+        rl.close();
         process.exit(0);
+    } else if (input === '?') {
+        console.log(generateHelpTable(moves));
     } else {
-        console.log("Invalid input. Please select a valid move.");
+        const moveIndex = parseInt(input) - 1;
+        if (moveIndex >= 0 && moveIndex < moves.length) {
+            const userMove = moves[moveIndex];
+            const userIndex = moves.indexOf(userMove);
+            const computerIndex = moves.indexOf(computerMove);
+            const half = Math.floor(moves.length / 2);
+
+            console.log(`Your move: ${userMove}`);
+            console.log(`Computer move: ${computerMove}`);
+
+            if (userIndex === computerIndex) {
+                console.log("It's a draw!");
+            } else if ((computerIndex > userIndex && computerIndex - userIndex <= half) ||
+                (userIndex > computerIndex && userIndex - computerIndex > half)) {
+                console.log("Computer Wins!");
+            } else {
+                console.log("You Win!");
+            }
+
+            console.log(`HMAC key: ${key}`);
+            rl.close();
+            process.exit(0);
+        } else {
+            console.log("Invalid input. Please select a valid move.");
+        }
     }
 });
