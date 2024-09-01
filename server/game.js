@@ -19,24 +19,25 @@ console.log(`HMAC: ${hmac}`);
 
 const generateHelpTable = (moves) => {
     const half = Math.floor(moves.length / 2);
-    const separator = `+${'-'.repeat(10 * (moves.length + 1))}+\n`;
+    const colWidth = 10; // Adjust this width based on your longest move and padding needs
+    const separator = '+----------'.repeat(moves.length + 1) + '+\n';
     let table = `\n${separator}`;
 
-    table += `|          |`;
+    table += '|          |';
     moves.forEach(move => {
-        table += `${move.padEnd(10)}|`;
+        table += ` ${move.padEnd(colWidth - 2)}|`;
     });
     table += `\n${separator}`;
 
     moves.forEach((move, i) => {
-        let row = `| ${move.padEnd(8)}|`;
+        let row = `| ${move.padEnd(colWidth - 2)}|`;
         moves.forEach((_, j) => {
             if (i === j) {
-                row += ` Draw    |`;
+                row += ` Draw     |`;
             } else if ((j > i && j - i <= half) || (i > j && i - j > half)) {
-                row += ` Lose    |`;
+                row += ` Lose     |`;
             } else {
-                row += ` Win     |`;
+                row += ` Win      |`;
             }
         });
         row += `\n${separator}`;
@@ -45,6 +46,7 @@ const generateHelpTable = (moves) => {
 
     return table;
 };
+
 
 
 // Available moves display
