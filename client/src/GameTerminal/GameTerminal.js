@@ -18,8 +18,10 @@ const GameTerminal = () => {
         };
 
         ws.onmessage = (event) => {
-            console.log('Message received from server:', event.data);
-            terminal.writeln(event.data);
+          const message = event.data.trim();
+          if (message.length > 0) {
+              terminal.writeln(message);
+          }
         };
 
         ws.onerror = (error) => {
