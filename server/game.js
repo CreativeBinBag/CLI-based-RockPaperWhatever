@@ -17,31 +17,30 @@ const hmac = crypto.createHmac('sha256', key).update(computerMove).digest('hex')
 // Display the HMAC to the user
 console.log(`HMAC: ${hmac}`);
 
+const colWidth = 10;  // Column width needs to be consistent across all rows
+
 const generateHelpTable = (moves) => {
     const half = Math.floor(moves.length / 2);
-    const maxMoveLength = Math.max(...moves.map(move => move.length));
-    const colWidth = maxMoveLength + 4; 
-    const separator = `+${'-'.repeat(colWidth * (moves.length + 1) + moves.length + 1)}+\n`;
-    const stripAnsi = (str) => str.replace(/\x1b\[[0-9;]*m/g, '');
+    const separator = `+${'-'.repeat(colWidth * (moves.length + 1))}+\n`;
     let table = `\n${separator}`;
 
     // Header row
     table += `| ${''.padEnd(colWidth)}|`;
     moves.forEach(move => {
-        table += ` ${move.padEnd(colWidth - 1)}|`;
+        table += `${move.padEnd(colWidth)}|`;
     });
     table += `\n${separator}`;
 
     // Each move row
     moves.forEach((move, i) => {
-        let row = `| ${move.padEnd(colWidth - 1)}|`;
+        let row = `| ${move.padEnd(colWidth)}|`;
         moves.forEach((_, j) => {
             if (i === j) {
-                row += ` ${stripAnsi('\x1b[33mDraw\x1b[0m').padEnd(colWidth - 1)}|`;
+                row += `Draw`.padEnd(colWidth) + '|';
             } else if ((j > i && j - i <= half) || (i > j && i - j > half)) {
-                row += ` ${stripAnsi('\x1b[31mLose\x1b[0m').padEnd(colWidth - 1)}|`;
+                row += `Lose`.padEnd(colWidth) + '|';
             } else {
-                row += ` ${stripAnsi('\x1b[32mWin\x1b[0m').padEnd(colWidth - 1)}|`;
+                row += `Win`.padEnd(colWidth) + '|';
             }
         });
         row += `\n${separator}`;
@@ -50,6 +49,7 @@ const generateHelpTable = (moves) => {
 
     return table;
 };
+
 
 // Available moves display
 console.log("Available moves:");
