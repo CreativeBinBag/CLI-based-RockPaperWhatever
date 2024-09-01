@@ -21,7 +21,7 @@ const hmac = crypto.createHmac('sha256', key).update(computerMove).digest('hex')
 // Display the HMAC to the user
 console.log(`HMAC: ${hmac}`);
 
-const generateHelpTable = (moves) => {
+
     const generateHelpTable = (moves) => {
         let table = "\nHelp Table:\n";
         const columnWidth = 10; // Adjust this value as needed for better alignment
@@ -47,7 +47,7 @@ const generateHelpTable = (moves) => {
         return table;
     };
     
-};
+
 
 
 // Available moves display
