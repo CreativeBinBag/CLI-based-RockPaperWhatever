@@ -71,7 +71,7 @@ wss.on('connection', (ws) => {
 
             gameProcess.on('exit', (code) => {
                 ws.send('Game exited. Thanks for playing!');
-                gameProcess = null; // Clear the reference
+                gameProcess = null;  // Clear the reference
             });
         } else if (parsedMessage.type === 'move' && gameProcess) {
             const userMove = parsedMessage.data.trim();
