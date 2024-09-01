@@ -22,6 +22,7 @@ console.log(`HMAC: ${hmac}`);
 
 // Wait for user input via WebSocket (will be integrated later)
 process.stdin.on('data', (data) => {
+  console.log(`Received data: ${data}`);
     const userMoveIndex = parseInt(data.toString().trim(), 10) - 1;
     if (userMoveIndex >= 0 && userMoveIndex < moves.length) {
         const userMove = moves[userMoveIndex];
