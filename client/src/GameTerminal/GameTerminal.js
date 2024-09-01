@@ -1,58 +1,76 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Terminal } from 'xterm';
 import 'xterm/css/xterm.css';
 
 const GameTerminal = () => {
-  useEffect(() => {
-    const ws = new WebSocket('wss://cli-based-rockpaperwhateverbackend-cmow.onrender.com');
-    const terminal = new Terminal();
-    terminal.open(document.getElementById('terminal'));
+    const terminalRef = useRef(null);
+    const wsRef = useRef(null);
+    const inputBuffer = useRef('');
+    const movesSent = useRef(false);
 
-    let inputBuffer = '';
-    let movesSent = false;
+    useEffect(() => {
+        const ws = new WebSocket('wss://cli-based-rockpaperwhateverbackend-cmow.onrender.com');
+        wsRef.current = ws;
 
-    ws.onopen = () => {
-      terminal.writeln('Welcome to Rock-Paper-Scissors!');
-      terminal.writeln('Please enter the moves (comma-separated), then press Enter:');
-    };
+        const terminal = new Terminal();
+        terminal.open(terminalRef.current);
 
-    ws.onmessage = (event) => {
-      terminal.writeln(event.data.trim());
-    };
+        terminal.writeln('Welcome to Rock-Paper-Scissors!');
+        terminal.writeln('Please enter the moves (comma-separated), then press Enter:');
 
-    ws.onerror = (error) => {
-      terminal.writeln(`WebSocket error: ${error.message}`);
-    };
+        ws.onopen = () => {
+            // Additional initialization if needed
+        };
 
-    terminal.onData(data => {
-      if (data.charCodeAt(0) === 13) { // Enter key
-        if (inputBuffer.trim()) {
-          if (!movesSent) {
-            ws.send(JSON.stringify({ type: 'moves', data: inputBuffer.split(',').map(m => m.trim()).filter(m => m.length > 0) }));
-            movesSent = true;
-            terminal.writeln('Moves sent! Please enter your move (number) or type "?" for help:');
-          } else {
-            ws.send(JSON.stringify({ type: 'move', data: inputBuffer.trim() }));
-          }
-          inputBuffer = '';
+        ws.onmessage = (event) => {
+            terminal.writeln(event.data.trim());
+        };
+
+        ws.onerror = (error) => {
+            terminal.writeln(`WebSocket error: ${error.message}`);
+        };
+
+        terminal.onData(data => {
+            if (data.charCodeAt(0) === 13) { // Enter key
+                handleEnterKey();
+            } else if (data.charCodeAt(0) === 8) { // Backspace
+                handleBackspace();
+            } else {
+                inputBuffer.current += data;
+                terminal.write(data);
+            }
+        });
+
+        return () => {
+            ws.close();
+        };
+    }, []);
+
+    const handleEnterKey = () => {
+        const buffer = inputBuffer.current.trim();
+        if (buffer) {
+            if (!movesSent.current) {
+                wsRef.current.send(JSON.stringify({
+                    type: 'moves',
+                    data: buffer.split(',').map(m => m.trim()).filter(m => m.length > 0)
+                }));
+                movesSent.current = true;
+                terminalRef.current.writeln('Moves sent! Please enter your move (number) or type "?" for help:');
+            } else {
+                wsRef.current.send(JSON.stringify({ type: 'move', data: buffer }));
+            }
+            inputBuffer.current = '';
         }
-      } else if (data.charCodeAt(0) === 8) { // Backspace
-        if (inputBuffer.length > 0) {
-          inputBuffer = inputBuffer.slice(0, -1);
-          terminal.write('\b \b');
-        }
-      } else {
-        inputBuffer += data;
-        terminal.write(data);
-      }
-    });
-
-    return () => {
-      ws.close();
     };
-  }, []);
 
-  return <div id="terminal" style={{ width: '100%', height: '500px' }} />;
+    const handleBackspace = () => {
+        if (inputBuffer.current.length > 0) {
+            inputBuffer.current = inputBuffer.current.slice(0, -1);
+            terminalRef.current.write('\b \b');
+        }
+    };
+
+    return <div ref={terminalRef} style={{ width: '100%', height: '500px' }} />;
 };
 
 export default GameTerminal;
