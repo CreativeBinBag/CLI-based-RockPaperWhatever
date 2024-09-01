@@ -9,6 +9,7 @@ if (moves.length < 3 || moves.length % 2 === 0) {
 }
 
 function playRound() {
+    clearTerminal();
 
 const key = crypto.randomBytes(32).toString('hex');
 
@@ -22,8 +23,9 @@ const hmac = crypto.createHmac('sha256', key).update(computerMove).digest('hex')
 console.log(`\nHMAC: ${hmac}`);
 console.log('Please enter your move:');
 
+process.stdin.removeAllListeners('data');
 
-process.stdin.on('data', (data) => {
+process.stdin.once('data', (data) => {
         const userMove = data.toString().trim();
 
         if (userMove === 'exit') {
@@ -45,6 +47,7 @@ process.stdin.on('data', (data) => {
 
             console.log(`\nComputer move: ${computerMove}`);
             console.log(`\nKey: ${key}`);
+            process.stdout.write('\n');
             playRound();
 
 
@@ -57,4 +60,7 @@ process.stdin.on('data', (data) => {
 
 }
 
-playRound();
+
+function clearTerminal() {
+    process.stdout.write('\x1Bc');
+}
