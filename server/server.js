@@ -45,51 +45,50 @@ const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws) => {
     console.log('Client connected');
-
+  
     let gameProcess = null;
-
+  
     ws.on('message', (message) => {
-        const parsedMessage = JSON.parse(message);
-
-        if (parsedMessage.type === 'moves') {
-            const moves = parsedMessage.data;
-
-            if (moves.length < 3 || moves.length % 2 === 0) {
-                ws.send('Error: Please provide an odd number (≥ 3) of non-repeating moves.');
-                return;
-            }
-
-            gameProcess = spawn('node', ['game.js', ...moves]);
-
-            gameProcess.stdout.on('data', (data) => {
-                ws.send(data.toString());
-            });
-
-            gameProcess.stderr.on('data', (data) => {
-                ws.send(`Error: ${data.toString()}`);
-            });
-
-            gameProcess.on('exit', (code) => {
-                ws.send('Game exited. Thanks for playing!');
-                gameProcess = null;  // Clear the reference
-            });
-        } else if (parsedMessage.type === 'move' && gameProcess) {
-            const userMove = parsedMessage.data.trim();
-
-            if (!userMove.match(/^[0-9]+$|^\?$/)) {
-                ws.send('Invalid input. Please enter a number corresponding to a move or "?" for help.');
-                return;
-            }
-
-            gameProcess.stdin.write(`${userMove}\n`);
+      const parsedMessage = JSON.parse(message);
+  
+      if (parsedMessage.type === 'moves') {
+        const moves = parsedMessage.data;
+  
+        if (moves.length < 3 || moves.length % 2 === 0) {
+          ws.send('Error: Please provide an odd number (≥ 3) of non-repeating moves.');
+          return;
         }
+  
+        gameProcess = spawn('node', ['game.js', ...moves]);
+  
+        gameProcess.stdout.on('data', (data) => {
+          ws.send(data.toString());
+        });
+  
+        gameProcess.stderr.on('data', (data) => {
+          ws.send(`Error: ${data.toString()}`);
+        });
+  
+        gameProcess.on('exit', () => {
+          ws.send('Game exited. Thanks for playing!');
+          gameProcess = null;
+        });
+      } else if (parsedMessage.type === 'move' && gameProcess) {
+        const userMove = parsedMessage.data.trim();
+  
+        if (!userMove.match(/^[0-9]+$|^\?$/)) {
+          ws.send('Invalid input. Please enter a number corresponding to a move or "?" for help.');
+          return;
+        }
+  
+        gameProcess.stdin.write(`${userMove}\n`);
+      }
     });
-
+  
     ws.on('close', () => {
-        console.log('Client disconnected');
-        if (gameProcess) {
-            gameProcess.kill();
-        }
+      console.log('Client disconnected');
+      if (gameProcess) {
+        gameProcess.kill();
+      }
     });
-});
-
+  });

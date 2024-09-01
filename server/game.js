@@ -1,13 +1,6 @@
 const crypto = require('crypto');
 const readline = require('readline');
 
-// Validate the moves passed as command line arguments
-const moves = process.argv.slice(2);
-if (moves.length < 3 || moves.length % 2 === 0) {
-    console.error("Error: Please provide an odd number (≥ 3) of non-repeating moves.");
-    console.error("Example: node game.js rock paper scissors");
-    process.exit(1);
-}
 
 // Generate a cryptographic key
 const key = crypto.randomBytes(32).toString('hex');
