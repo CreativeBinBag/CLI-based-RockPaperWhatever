@@ -2,70 +2,62 @@ import React, { useEffect, useState } from 'react';
 import { Terminal } from 'xterm';
 import 'xterm/css/xterm.css';
 
-
 const GameTerminal = () => {
-  const [ws, setWs] = useState(null);
+    const [ws, setWs] = useState(null);
 
-  useEffect(() => {
-      const connectWebSocket = () => {
-          const websocket = new WebSocket('wss://cli-based-rockpaperwhateverbackend-cmow.onrender.com');
+    useEffect(() => {
+        const websocket = new WebSocket('wss://cli-based-rockpaperwhateverbackend-cmow.onrender.com');
+        setWs(websocket);
 
-          websocket.onopen = () => {
-              console.log('WebSocket connection opened');
-          };
+        const terminal = new Terminal();
+        terminal.open(document.getElementById('terminal'));
 
-          websocket.onmessage = (event) => {
-              console.log('Message received from server:', event.data);
-              terminal.writeln(event.data);
-          };
+        let inputBuffer = '';
 
-          websocket.onerror = (error) => {
-              console.error('WebSocket error:', error);
-              // Handle reconnection logic if needed
-          };
+        websocket.onopen = () => {
+            console.log('WebSocket connection opened');
+        };
 
-          websocket.onclose = (event) => {
-              console.log('WebSocket connection closed:', event.reason);
-              // Try reconnecting after a delay
-              setTimeout(connectWebSocket, 5000);
-          };
+        websocket.onmessage = (event) => {
+            console.log('Message received from server:', event.data);
+            terminal.writeln(event.data);
+        };
 
-          setWs(websocket);
-      };
+        websocket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+            if (error.message) {
+                console.error('Error message:', error.message);
+            }
+            if (error.stack) {
+                console.error('Error stack:', error.stack);
+            }
+        };
 
-      connectWebSocket();
+        terminal.onData(data => {
+            if (data.charCodeAt(0) === 13) { // Enter key
+                if (inputBuffer.trim()) {
+                    console.log('Sending data to server:', inputBuffer.trim());
+                    websocket.send(inputBuffer.trim());
+                }
+                inputBuffer = '';
+            } else if (data.charCodeAt(0) === 8) { // Backspace key
+                inputBuffer = inputBuffer.slice(0, -1);
+                terminal.write('\b \b');
+            } else {
+                inputBuffer += data;
+                terminal.write(data);
+            }
+        });
 
-      const terminal = new Terminal();
-      terminal.open(document.getElementById('terminal'));
+        return () => {
+            console.log('WebSocket connection closed');
+            if (ws) {
+                ws.close();
+            }
+        };
+    }, [ws]);
 
-      let inputBuffer = '';
-
-      terminal.onData(data => {
-          if (data.charCodeAt(0) === 13) { // Enter key
-              if (inputBuffer.trim()) {
-                  console.log('Sending data to server:', inputBuffer.trim());
-                  ws.send(inputBuffer.trim());
-              }
-              inputBuffer = '';
-          } else if (data.charCodeAt(0) === 8) { // Backspace key
-              inputBuffer = inputBuffer.slice(0, -1);
-              terminal.write('\b \b');
-          } else {
-              inputBuffer += data;
-              terminal.write(data);
-          }
-      });
-
-      return () => {
-          console.log('Cleaning up WebSocket connection');
-          if (ws) {
-              ws.close();
-          }
-      };
-  }, [ws]);
-
-  return <div id="terminal" style={{ width: '100%', height: '500px' }} />;
+    return <div id="terminal" style={{ width: '100%', height: '500px' }} />;
 };
-
 
 export default GameTerminal;
