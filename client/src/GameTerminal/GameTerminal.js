@@ -52,7 +52,7 @@ const GameTerminal = () => {
         };
     }, []);
 
-    return <div id="terminal" style={{ width: '100%', height: '100%' }} />;
+    return <div id="terminal" style={{ width: '100%', height: '100vh' }} />;
 };
 
 export default GameTerminal;
