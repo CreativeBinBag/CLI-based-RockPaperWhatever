@@ -8,17 +8,28 @@ const GameTerminal = () => {
         const terminal = new Terminal();
         terminal.open(document.getElementById('terminal'));
 
+        ws.onopen = () => {
+          console.log('WebSocket connection opened');
+      };
+
         // Handle data from WebSocket (game process)
         ws.onmessage = (event) => {
+            console.log('Message received from server:', event.data);
             terminal.writeln(event.data);
         };
 
+        ws.onerror = (error) => {
+          console.error('WebSocket error:', error);
+      };
+
         // Send user input to WebSocket (game process)
         terminal.onData(data => {
+          console.log('Sending data to server:', data);
             ws.send(data);
         });
 
         return () => {
+          console.log('WebSocket connection closed');
             ws.close();
         };
     }, []);
