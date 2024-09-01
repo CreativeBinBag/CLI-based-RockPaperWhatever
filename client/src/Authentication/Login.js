@@ -30,7 +30,7 @@ const Login = () => {
       if (auth?.role === 'admin') {
         navigate('/manage-users'); 
       } else {
-        navigate('/login'); 
+        navigate('/game'); 
       }
     }
   }, [success, auth, navigate]); 
