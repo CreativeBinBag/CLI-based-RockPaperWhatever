@@ -39,10 +39,6 @@ db.sequelize.sync().then(() => {
 
 app.use('/api/users', userRoutes);
 
-
-//listening to server connection
-app.listen(PORT,'0.0.0.0', () => console.log(`Server is connected on ${PORT}`))
-
 // Start the Express server
 const server = app.listen(PORT, '0.0.0.0', () => console.log(`Server is connected on ${PORT}`));
 
