@@ -21,9 +21,7 @@ const hmac = crypto.createHmac('sha256', key).update(computerMove).digest('hex')
 console.log(`HMAC: ${hmac}`);
 
 process.stdin.on('data', (data) => {
-    
-    console.log(`Received data: ${data}`);
-    const userMove = data.toString().trim();
+        const userMove = data.toString().trim();
     if (moves.includes(userMove)) {
         const userIndex = moves.indexOf(userMove);
         const computerIndex = moves.indexOf(computerMove);
