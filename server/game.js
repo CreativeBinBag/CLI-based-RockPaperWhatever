@@ -21,34 +21,37 @@ const hmac = crypto.createHmac('sha256', key).update(computerMove).digest('hex')
 // Display the HMAC to the user
 console.log(`HMAC: ${hmac}`);
 
+const generateHelpTable = (moves) => {
+    const half = Math.floor(moves.length / 2);
+    const colWidth = 20; // Adjust this width based on your longest move and padding needs
+    const separator = `+${'-'.repeat(colWidth * moves.length + moves.length + 1)}+\n`;
+    let table = `\n${separator}`;
 
-    const generateHelpTable = (moves) => {
-        let table = "\nHelp Table:\n";
-        const columnWidth = 10; // Adjust this value as needed for better alignment
-    
-        // Generate the header row
-        table += "".padEnd(columnWidth) + moves.map(move => move.padEnd(columnWidth)).join("") + "\n";
-    
-        // Generate each row of the table
-        moves.forEach((move, i) => {
-            let row = move.padEnd(columnWidth); // Start with the row label (e.g., "rock")
-            moves.forEach((_, j) => {
-                if (i === j) {
-                    row += "Draw".padEnd(columnWidth);
-                } else if ((j > i && j - i <= Math.floor(moves.length / 2)) || (i > j && i - j > Math.floor(moves.length / 2))) {
-                    row += "Lose".padEnd(columnWidth);
-                } else {
-                    row += "Win".padEnd(columnWidth);
-                }
-            });
-            table += row + "\n";
+    // Header row
+    table += `| ${''.padEnd(colWidth)}|`;
+    moves.forEach(move => {
+        table += ` ${move.padEnd(colWidth - 1)}|`;
+    });
+    table += `\n${separator}`;
+
+    // Each move row
+    moves.forEach((move, i) => {
+        let row = `| ${move.padEnd(colWidth - 1)}|`;
+        moves.forEach((_, j) => {
+            if (i === j) {
+                row += ` ${`\x1b[33mDraw\x1b[0m`.padEnd(colWidth)}|`;
+            } else if ((j > i && j - i <= half) || (i > j && i - j > half)) {
+                row += ` ${`\x1b[31mLose\x1b[0m`.padEnd(colWidth)}|`;
+            } else {
+                row += ` ${`\x1b[32mWin\x1b[0m`.padEnd(colWidth)}|`;
+            }
         });
-    
-        return table;
-    };
-    
+        row += `\n${separator}`;
+        table += row;
+    });
 
-
+    return table;
+};
 
 // Available moves display
 console.log("Available moves:");
