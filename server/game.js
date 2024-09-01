@@ -17,30 +17,26 @@ const hmac = crypto.createHmac('sha256', key).update(computerMove).digest('hex')
 // Display the HMAC to the user
 console.log(`HMAC: ${hmac}`);
 
-const colWidth = 10;  // Column width needs to be consistent across all rows
-
 const generateHelpTable = (moves) => {
     const half = Math.floor(moves.length / 2);
-    const separator = `+${'-'.repeat(colWidth * (moves.length + 1))}+\n`;
+    const separator = `+${'-'.repeat(10 * (moves.length + 1))}+\n`;
     let table = `\n${separator}`;
 
-    // Header row
-    table += `| ${''.padEnd(colWidth)}|`;
+    table += `|          |`;
     moves.forEach(move => {
-        table += `${move.padEnd(colWidth)}|`;
+        table += `${move.padEnd(10)}|`;
     });
     table += `\n${separator}`;
 
-    // Each move row
     moves.forEach((move, i) => {
-        let row = `| ${move.padEnd(colWidth)}|`;
+        let row = `| ${move.padEnd(8)}|`;
         moves.forEach((_, j) => {
             if (i === j) {
-                row += `Draw`.padEnd(colWidth) + '|';
+                row += ` Draw    |`;
             } else if ((j > i && j - i <= half) || (i > j && i - j > half)) {
-                row += `Lose`.padEnd(colWidth) + '|';
+                row += ` Lose    |`;
             } else {
-                row += `Win`.padEnd(colWidth) + '|';
+                row += ` Win     |`;
             }
         });
         row += `\n${separator}`;
