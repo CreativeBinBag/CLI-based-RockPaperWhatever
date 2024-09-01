@@ -23,7 +23,7 @@ console.log(`HMAC: ${hmac}`);
 
 const generateHelpTable = (moves) => {
     const half = Math.floor(moves.length / 2);
-    const colWidth = 10; // Adjust this width based on your longest move and padding needs
+    const colWidth = 15; // Adjusted width for better spacing
     const separator = `+${'-'.repeat(colWidth * moves.length + moves.length + 1)}+\n`;
     let table = `\n${separator}`;
 
@@ -39,11 +39,11 @@ const generateHelpTable = (moves) => {
         let row = `| ${move.padEnd(colWidth - 1)}|`;
         moves.forEach((_, j) => {
             if (i === j) {
-                row += ` ${`\x1b[33mDraw\x1b[0m`.padEnd(colWidth)}|`;
+                row += ` ${'Draw'.padEnd(colWidth)}|`;
             } else if ((j > i && j - i <= half) || (i > j && i - j > half)) {
-                row += ` ${`\x1b[31mLose\x1b[0m`.padEnd(colWidth)}|`;
+                row += ` ${'Lose'.padEnd(colWidth)}|`;
             } else {
-                row += ` ${`\x1b[32mWin\x1b[0m`.padEnd(colWidth)}|`;
+                row += ` ${'Win'.padEnd(colWidth)}|`;
             }
         });
         row += `\n${separator}`;
