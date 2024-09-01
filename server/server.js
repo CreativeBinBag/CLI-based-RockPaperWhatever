@@ -41,46 +41,46 @@ app.use('/api/users', userRoutes);
 // Start the Express server
 const server = app.listen(PORT, '0.0.0.0', () => console.log(`Server is connected on ${PORT}`));
 
-// Initialize WebSocket Server
 const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws) => {
     console.log('Client connected');
 
-    let moves = null;
     let gameProcess = null;
 
     ws.on('message', (message) => {
         const parsedMessage = JSON.parse(message);
 
         if (parsedMessage.type === 'moves') {
-            moves = parsedMessage.data;
+            const moves = parsedMessage.data;
 
-            // Spawn the game process with the moves
-            gameProcess = spawn('node', ['game.js', ...moves]);
-
-            // Send the initial HMAC and help table to the client
-            gameProcess.stdout.on('data', (data) => {
-                ws.send(data.toString() + "\n");
-            });
-
-            gameProcess.stderr.on('data', (data) => {
-                console.error(`Game error: ${data}`);
-            });
-
-            gameProcess.on('exit', (code) => {
-                ws.send(`Game exited with code ${code}`);
-                ws.send('Game over. Thanks for playing!');
-            });
-        } else if (parsedMessage.type === 'move' && gameProcess) {
-            const userMove = parsedMessage.data;
-
-            if (!moves.includes(userMove)) {
-                ws.send('Invalid input. Please select a valid move.');
+            if (moves.length < 3 || moves.length % 2 === 0) {
+                ws.send('Error: Please provide an odd number (≥ 3) of non-repeating moves.');
                 return;
             }
 
-            // Write the user's move to the game process
+            gameProcess = spawn('node', ['game.js', ...moves]);
+
+            gameProcess.stdout.on('data', (data) => {
+                ws.send(data.toString());
+            });
+
+            gameProcess.stderr.on('data', (data) => {
+                ws.send(`Error: ${data.toString()}`);
+            });
+
+            gameProcess.on('exit', (code) => {
+                ws.send('Game exited. Thanks for playing!');
+                gameProcess = null;  // Clear the reference
+            });
+        } else if (parsedMessage.type === 'move' && gameProcess) {
+            const userMove = parsedMessage.data.trim();
+
+            if (!userMove.match(/^[0-9]+$|^\?$/)) {
+                ws.send('Invalid input. Please enter a number corresponding to a move or "?" for help.');
+                return;
+            }
+
             gameProcess.stdin.write(`${userMove}\n`);
         }
     });
@@ -92,3 +92,4 @@ wss.on('connection', (ws) => {
         }
     });
 });
+
