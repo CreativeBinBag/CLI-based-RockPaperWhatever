@@ -8,24 +8,31 @@ if (moves.length < 3 || moves.length % 2 === 0) {
     process.exit(1);
 }
 
-function playRound() {
+
+const clearTerminal = () => {
+    process.stdout.write('\x1Bc');
+}
+
+const playRound = () => {
     clearTerminal();
 
-const key = crypto.randomBytes(32).toString('hex');
+    // Generate a cryptographic key
+    const key = crypto.randomBytes(32).toString('hex');
 
-// Randomly select a move for the computer
-const computerMove = moves[Math.floor(Math.random() * moves.length)];
+    // Randomly select a move for the computer
+    const computerMove = moves[Math.floor(Math.random() * moves.length)];
 
-// Generate HMAC using the selected computer move
-const hmac = crypto.createHmac('sha256', key).update(computerMove).digest('hex');
+    // Generate HMAC using the selected computer move
+    const hmac = crypto.createHmac('sha256', key).update(computerMove).digest('hex');
 
-// Display the HMAC to the user
-console.log(`\nHMAC: ${hmac}`);
-console.log('Please enter your move:');
+    // Display the HMAC to the user
+    console.log(`\nHMAC: ${hmac}`);
+    console.log('Please enter your move:');
 
-process.stdin.removeAllListeners('data');
+    // Remove previous listeners to avoid handling multiple inputs
+    process.stdin.removeAllListeners('data');
 
-process.stdin.once('data', (data) => {
+    process.stdin.once('data', (data) => {
         const userMove = data.toString().trim();
 
         if (userMove === 'exit') {
@@ -39,27 +46,22 @@ process.stdin.once('data', (data) => {
             if (userIndex === computerIndex) {
                 console.log("Draw!");
             } else if ((computerIndex > userIndex && computerIndex - userIndex <= half) ||
-                    (userIndex > computerIndex && userIndex - computerIndex > half)) {
+                       (userIndex > computerIndex && userIndex - computerIndex > half)) {
                 console.log("Computer Wins!");
             } else {
                 console.log("You Win!");
             }
 
-            console.log(`\nComputer move: ${computerMove}`);
-            console.log(`\nKey: ${key}`);
+            console.log(`Computer move: ${computerMove}`);
+            console.log(`Key: ${key}`);
+
+            // Start another round
             playRound();
-
-
         } else {
             console.log("Invalid input. Please select a valid move.");
+            // Restart the current round if the input is invalid
             playRound();
-
         }
-});
-
+    });
 }
 
-
-function clearTerminal() {
-    process.stdout.write('\x1Bc');
-}
