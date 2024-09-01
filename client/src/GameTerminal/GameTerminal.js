@@ -18,10 +18,10 @@ const GameTerminal = () => {
         };
 
         ws.onmessage = (event) => {
-          const message = event.data.trim();
-          if (message.length > 0) {
-              terminal.writeln(message);
-          }
+            const message = event.data.trim();
+            if (message.length > 0) {
+                terminal.writeln(message);
+            }
         };
 
         ws.onerror = (error) => {
@@ -32,7 +32,7 @@ const GameTerminal = () => {
             if (data.charCodeAt(0) === 13) { // Enter key (newline)
                 if (inputBuffer.trim()) {
                     if (!movesSent) {
-                        ws.send(JSON.stringify({ type: 'moves', data: inputBuffer.trim().split(',').map(m => m.trim()) }));
+                        ws.send(JSON.stringify({ type: 'moves', data: inputBuffer.split(',').map(m => m.trim()).filter(m => m.length > 0) }));
                         movesSent = true;
                         terminal.writeln('Moves sent! Please enter your move:');
                     } else {
