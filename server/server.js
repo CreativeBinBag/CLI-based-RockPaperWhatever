@@ -61,7 +61,7 @@ wss.on('connection', (ws) => {
 
             // Send the initial HMAC to the client
             gameProcess.stdout.on('data', (data) => {
-                ws.send(data.toString());
+                ws.send(data.toString() + "\n");
             });
 
             gameProcess.stderr.on('data', (data) => {
@@ -86,8 +86,7 @@ wss.on('connection', (ws) => {
 
     ws.on('close', () => {
         console.log('Client disconnected');
-        if (gameProcess) {
             gameProcess.kill();
-        }
+   
     });
 });
