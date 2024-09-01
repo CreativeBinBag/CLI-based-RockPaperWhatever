@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Terminal } from 'xterm';
+import {FitAddon} from 'xterm-addon-fit';
 import 'xterm/css/xterm.css';
 
 const GameTerminal = () => {
@@ -16,10 +17,12 @@ const GameTerminal = () => {
       }
   });  
 
-
+    const fitAddon = new FitAddon();
+    terminal.loadAddon(fitAddon);
     terminal.open(document.getElementById('terminal'));
     terminal.resize(100, 24);  
-   
+    fitAddon.fit()
+  
 
     let inputBuffer = '';
     let movesSent = false;
