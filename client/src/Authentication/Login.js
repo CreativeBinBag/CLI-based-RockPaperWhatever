@@ -69,11 +69,9 @@ const Login = () => {
         }}
        >
       {success ? (
-          <Box>
-          <Typography variant="h5">You are logged in!</Typography>
-          <br />
-          <Link to="/logout">Logout</Link> {/*link for now, change later to cli*/}
-        </Box>
+        
+          <Link to="/game"></Link> 
+      
       ) : (
         <Box
         sx={{
