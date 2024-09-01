@@ -20,43 +20,29 @@ const hmac = crypto.createHmac('sha256', key).update(computerMove).digest('hex')
 // Display the HMAC to the user
 console.log(`HMAC: ${hmac}`);
 
-let inputBuffer = '';
-
 process.stdin.on('data', (data) => {
-    inputBuffer += data.toString();
+    
+    console.log(`Received data: ${data}`);
+    const userMove = data.toString().trim();
+    if (moves.includes(userMove)) {
+        const userIndex = moves.indexOf(userMove);
+        const computerIndex = moves.indexOf(computerMove);
+        const half = Math.floor(moves.length / 2);
 
-    // Split the input buffer by newlines or spaces
-    let lines = inputBuffer.split(/\r?\n/);
-
-    // Process all lines except the last one (which may be incomplete)
-    lines.slice(0, -1).forEach(line => {
-        const userMoveIndex = parseInt(line.trim(), 10) - 1;
-        if (userMoveIndex >= 0 && userMoveIndex < moves.length) {
-            const userMove = moves[userMoveIndex];
-
-            // Determine the winner based on the circle of moves
-            const userIndex = moves.indexOf(userMove);
-            const computerIndex = moves.indexOf(computerMove);
-            const half = Math.floor(moves.length / 2);
-
-            if (userIndex === computerIndex) {
-                console.log("Draw!");
-            } else if ((computerIndex > userIndex && computerIndex - userIndex <= half) ||
-                       (userIndex > computerIndex && userIndex - computerIndex > half)) {
-                console.log("Computer Wins!");
-            } else {
-                console.log("You Win!");
-            }
-
-            console.log(`Computer move: ${computerMove}`);
-            console.log(`Key: ${key}`);
-
-            process.exit(0);
+        if (userIndex === computerIndex) {
+            console.log("Draw!");
+        } else if ((computerIndex > userIndex && computerIndex - userIndex <= half) ||
+                   (userIndex > computerIndex && userIndex - computerIndex > half)) {
+            console.log("Computer Wins!");
         } else {
-            console.log("Invalid input. Please select a valid move.");
+            console.log("You Win!");
         }
-    });
 
-    // Keep the last part of the input buffer
-    inputBuffer = lines[lines.length - 1];
+        console.log(`Computer move: ${computerMove}`);
+        console.log(`Key: ${key}`);
+
+        process.exit(0);
+    } else {
+        console.log("Invalid input. Please select a valid move.");
+    }
 });
