@@ -24,8 +24,15 @@ const GameTerminal = () => {
 
         // Send user input to WebSocket (game process)
         terminal.onData(data => {
+          
+          if (data.charCodeAt(0) === 13) { // Enter key (newline)
+            ws.send(inputBuffer.trim()); // Send the complete input
+            inputBuffer = ''; // Clear the buffer
+        } else {
+            inputBuffer += data; // Accumulate data
+        }
           console.log('Sending data to server:', data);
-            ws.send(data);
+          
         });
 
         return () => {
