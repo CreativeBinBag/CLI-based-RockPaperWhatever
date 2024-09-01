@@ -59,7 +59,7 @@ wss.on('connection', (ws) => {
             // Spawn the game process with the moves
             gameProcess = spawn('node', ['game.js', ...moves]);
 
-            // Send the initial HMAC to the client
+            // Send the initial HMAC and help table to the client
             gameProcess.stdout.on('data', (data) => {
                 ws.send(data.toString() + "\n");
             });
@@ -70,6 +70,7 @@ wss.on('connection', (ws) => {
 
             gameProcess.on('exit', (code) => {
                 ws.send(`Game exited with code ${code}`);
+                ws.send('Game over. Thanks for playing!');
             });
         } else if (parsedMessage.type === 'move' && gameProcess) {
             const userMove = parsedMessage.data;

@@ -20,8 +20,24 @@ const hmac = crypto.createHmac('sha256', key).update(computerMove).digest('hex')
 // Display the HMAC to the user
 console.log(`HMAC: ${hmac}`);
 
+// Generate and display the help table
+const generateHelpTable = (moves) => {
+    const half = Math.floor(moves.length / 2);
+    console.log("\nHelp Table:");
+    moves.forEach((move, i) => {
+        const beats = [];
+        for (let j = 1; j <= half; j++) {
+            beats.push(moves[(i + j) % moves.length]);
+        }
+        console.log(`${i + 1}. ${move} beats ${beats.join(', ')}`);
+    });
+    console.log('4. Help table\n5. Exit\n');
+};
+
+generateHelpTable(moves);
+
 process.stdin.on('data', (data) => {
-        const userMove = data.toString().trim();
+    const userMove = data.toString().trim();
     if (moves.includes(userMove)) {
         const userIndex = moves.indexOf(userMove);
         const computerIndex = moves.indexOf(computerMove);
@@ -29,23 +45,21 @@ process.stdin.on('data', (data) => {
 
         if (userIndex === computerIndex) {
             console.log("\nDraw!");
-            process.stdout.write('\n');
         } else if ((computerIndex > userIndex && computerIndex - userIndex <= half) ||
                    (userIndex > computerIndex && userIndex - computerIndex > half)) {
             console.log("\nComputer Wins!");
-            process.stdout.write('\n');
-
         } else {
             console.log("\nYou Win!");
-            process.stdout.write('\n');
         }
 
         console.log(`\nComputer move: ${computerMove}`);
         console.log(`\nKey: ${key}`);
-        process.stdout.write('\n');
+        process.exit(0);
+    } else if (userMove.toLowerCase() === 'help table') {
+        generateHelpTable(moves);
+    } else if (userMove.toLowerCase() === 'exit') {
         process.exit(0);
     } else {
         console.log("\nInvalid input. Please select a valid move.");
-        process.stdout.write('\n');
     }
 });
