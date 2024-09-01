@@ -47,7 +47,6 @@ process.stdin.once('data', (data) => {
 
             console.log(`\nComputer move: ${computerMove}`);
             console.log(`\nKey: ${key}`);
-            process.stdout.write('\n');
             playRound();
 
 
