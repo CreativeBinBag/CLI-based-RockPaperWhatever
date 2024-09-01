@@ -20,7 +20,7 @@ const GameTerminal = () => {
     const fitAddon = new FitAddon();
     terminal.loadAddon(fitAddon);
     terminal.open(document.getElementById('terminal'));
-    terminal.resize(100, 24);  
+    terminal.resize(30, 30);  
     fitAddon.fit()
   
 
