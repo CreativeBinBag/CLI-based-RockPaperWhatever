@@ -8,37 +8,39 @@ const GameTerminal = () => {
         const terminal = new Terminal();
         terminal.open(document.getElementById('terminal'));
 
-        let inputBuffer = ''; // Define inputBuffer
+        let inputBuffer = '';
 
         ws.onopen = () => {
-          console.log('WebSocket connection opened');
-      };
+            console.log('WebSocket connection opened');
+        };
 
-        // Handle data from WebSocket (game process)
         ws.onmessage = (event) => {
             console.log('Message received from server:', event.data);
             terminal.writeln(event.data);
         };
 
         ws.onerror = (error) => {
-          console.error('WebSocket error:', error);
-      };
+            console.error('WebSocket error:', error);
+        };
 
-        // Send user input to WebSocket (game process)
         terminal.onData(data => {
-
-          if (data.charCodeAt(0) === 13) { // Enter key (newline)
-            ws.send(inputBuffer.trim()); // Send the complete input
-            inputBuffer = ''; // Clear the buffer
-        } else {
-            inputBuffer += data; // Accumulate data
-        }
-          console.log('Sending data to server:', data);
-          
+            // Accumulate input data
+            if (data.charCodeAt(0) === 13) { // Enter key (newline)
+                if (inputBuffer.trim()) {
+                    ws.send(inputBuffer.trim()); // Send the complete input
+                }
+                inputBuffer = ''; // Clear the buffer
+            } else if (data.charCodeAt(0) === 8) { // Backspace key
+                inputBuffer = inputBuffer.slice(0, -1); // Remove last character
+                terminal.write('\b \b'); // Visual feedback for backspace
+            } else {
+                inputBuffer += data; // Accumulate data
+                terminal.write(data); // Echo the data to terminal
+            }
         });
 
         return () => {
-          console.log('WebSocket connection closed');
+            console.log('WebSocket connection closed');
             ws.close();
         };
     }, []);
