@@ -12,7 +12,6 @@ const GameTerminal = () => {
         let movesSent = false;
 
         ws.onopen = () => {
-            console.log('WebSocket connection opened');
             terminal.writeln('Welcome to Rock-Paper-Scissors!');
             terminal.writeln('Please enter the moves (comma-separated), then press Enter:');
         };
@@ -29,28 +28,27 @@ const GameTerminal = () => {
         };
 
         terminal.onData(data => {
-            if (data.charCodeAt(0) === 13) { // Enter key (newline)
+            if (data.charCodeAt(0) === 13) { // Enter key
                 if (inputBuffer.trim()) {
                     if (!movesSent) {
                         ws.send(JSON.stringify({ type: 'moves', data: inputBuffer.split(',').map(m => m.trim()).filter(m => m.length > 0) }));
                         movesSent = true;
-                        terminal.writeln('Moves sent! Please enter your move:');
+                        terminal.writeln('Moves sent! Please enter your move or type "?" for help:');
                     } else {
                         ws.send(JSON.stringify({ type: 'move', data: inputBuffer.trim() }));
                     }
-                    inputBuffer = ''; // Clear the buffer
+                    inputBuffer = '';
                 }
-            } else if (data.charCodeAt(0) === 8) { // Backspace key
-                inputBuffer = inputBuffer.slice(0, -1); // Remove last character
-                terminal.write('\b \b'); // Visual feedback for backspace
+            } else if (data.charCodeAt(0) === 8) { // Backspace
+                inputBuffer = inputBuffer.slice(0, -1);
+                terminal.write('\b \b');
             } else {
-                inputBuffer += data; // Accumulate data
-                terminal.write(data); // Echo the data to terminal
+                inputBuffer += data;
+                terminal.write(data);
             }
         });
 
         return () => {
-            console.log('WebSocket connection closed');
             ws.close();
         };
     }, []);
