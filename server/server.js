@@ -48,40 +48,25 @@ const wss = new WebSocket.Server({ server });
 wss.on('connection', (ws) => {
     console.log('Client connected');
 
-    let moves = [];
-    let gameProcess = null;
+    // Spawning the game process
+    const gameProcess = spawn('node', ['game.js', 'Rock', 'Paper', 'Scissors']);
 
+    // Handle data from the game process
+    gameProcess.stdout.on('data', (data) => {
+        ws.send(data.toString());
+    });
+
+    gameProcess.stderr.on('data', (data) => {
+        console.error(`Game error: ${data}`);
+    });
+
+    // Handle data from the client
     ws.on('message', (message) => {
-        // Handle the initial message with moves
-        if (Array.isArray(message)) {
-            moves = message; // Assuming moves are sent as an array
-            console.log('Moves received:', moves);
-
-            // Start the game process
-            if (gameProcess) {
-                gameProcess.kill(); // Kill the old process if it exists
-            }
-            gameProcess = spawn('node', ['game.js', ...moves]);
-
-            gameProcess.stdout.on('data', (data) => {
-                ws.send(data.toString());
-            });
-
-            gameProcess.stderr.on('data', (data) => {
-                console.error(`Game error: ${data}`);
-            });
-        } else {
-            // Handle user moves
-            if (gameProcess) {
-                gameProcess.stdin.write(`${message}\n`);
-            }
-        }
+        gameProcess.stdin.write(`${message}\n`);
     });
 
     ws.on('close', () => {
         console.log('Client disconnected');
-        if (gameProcess) {
-            gameProcess.kill();
-        }
+        gameProcess.kill();
     });
 });
