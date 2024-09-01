@@ -8,6 +8,8 @@ const GameTerminal = () => {
         const terminal = new Terminal();
         terminal.open(document.getElementById('terminal'));
 
+        let inputBuffer = ''; // Define inputBuffer
+
         ws.onopen = () => {
           console.log('WebSocket connection opened');
       };
@@ -24,7 +26,7 @@ const GameTerminal = () => {
 
         // Send user input to WebSocket (game process)
         terminal.onData(data => {
-          
+
           if (data.charCodeAt(0) === 13) { // Enter key (newline)
             ws.send(inputBuffer.trim()); // Send the complete input
             inputBuffer = ''; // Clear the buffer
