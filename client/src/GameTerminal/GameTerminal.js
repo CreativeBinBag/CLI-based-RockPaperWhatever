@@ -9,9 +9,12 @@ const GameTerminal = () => {
         terminal.open(document.getElementById('terminal'));
 
         let inputBuffer = '';
+        let movesSent = false;
 
         ws.onopen = () => {
             console.log('WebSocket connection opened');
+            terminal.writeln('Welcome to Rock-Paper-Scissors!');
+            terminal.writeln('Please enter the moves (comma-separated), then press Enter:');
         };
 
         ws.onmessage = (event) => {
@@ -24,12 +27,17 @@ const GameTerminal = () => {
         };
 
         terminal.onData(data => {
-            // Accumulate input data
             if (data.charCodeAt(0) === 13) { // Enter key (newline)
                 if (inputBuffer.trim()) {
-                    ws.send(inputBuffer.trim()); // Send the complete input
+                    if (!movesSent) {
+                        ws.send(JSON.stringify({ type: 'moves', data: inputBuffer.trim().split(',').map(m => m.trim()) }));
+                        movesSent = true;
+                        terminal.writeln('Moves sent! Please enter your move:');
+                    } else {
+                        ws.send(JSON.stringify({ type: 'move', data: inputBuffer.trim() }));
+                    }
+                    inputBuffer = ''; // Clear the buffer
                 }
-                inputBuffer = ''; // Clear the buffer
             } else if (data.charCodeAt(0) === 8) { // Backspace key
                 inputBuffer = inputBuffer.slice(0, -1); // Remove last character
                 terminal.write('\b \b'); // Visual feedback for backspace
