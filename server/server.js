@@ -14,7 +14,7 @@ const WebSocket = require('ws'); // Import for WebSocket
 
 
 //setting up your port
-const PORT = process.env.PORT || 10000
+const PORT = process.env.PORT || 10001
 
 //assigning the variable app to express
 const app = express()
