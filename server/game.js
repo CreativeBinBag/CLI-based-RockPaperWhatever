@@ -22,21 +22,31 @@ const hmac = crypto.createHmac('sha256', key).update(computerMove).digest('hex')
 console.log(`HMAC: ${hmac}`);
 
 const generateHelpTable = (moves) => {
-    let table = "\nHelp Table:\n";
-    moves.forEach((move, i) => {
-        table += `${move}: `;
-        moves.forEach((_, j) => {
-            if (i === j) {
-                table += " Draw ";
-            } else if ((j > i && j - i <= Math.floor(moves.length / 2)) || (i > j && i - j > Math.floor(moves.length / 2))) {
-                table += " Lose ";
-            } else {
-                table += " Win  ";
-            }
+    const generateHelpTable = (moves) => {
+        let table = "\nHelp Table:\n";
+        const columnWidth = 10; // Adjust this value as needed for better alignment
+    
+        // Generate the header row
+        table += "".padEnd(columnWidth) + moves.map(move => move.padEnd(columnWidth)).join("") + "\n";
+    
+        // Generate each row of the table
+        moves.forEach((move, i) => {
+            let row = move.padEnd(columnWidth); // Start with the row label (e.g., "rock")
+            moves.forEach((_, j) => {
+                if (i === j) {
+                    row += "Draw".padEnd(columnWidth);
+                } else if ((j > i && j - i <= Math.floor(moves.length / 2)) || (i > j && i - j > Math.floor(moves.length / 2))) {
+                    row += "Lose".padEnd(columnWidth);
+                } else {
+                    row += "Win".padEnd(columnWidth);
+                }
+            });
+            table += row + "\n";
         });
-        table += "\n";
-    });
-    return table;
+    
+        return table;
+    };
+    
 };
 
 
