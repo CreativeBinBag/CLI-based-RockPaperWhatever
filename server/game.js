@@ -1,12 +1,8 @@
 const crypto = require('crypto');
 const readline = require('readline');
+const Table = require('cli-table');
 
 const moves = process.argv.slice(2);
-
-
-const terminalWidth = process.stdout.columns || 120;
-const padding = 3;
-const colWidth = Math.max(Math.floor((terminalWidth - (moves.length + 1) * padding) / (moves.length + 1)), moves.length);
 
 // Generate a cryptographic key
 const key = crypto.randomBytes(32).toString('hex');
@@ -22,33 +18,29 @@ console.log(`\nHMAC: ${hmac}`);
 
 const generateHelpTable = (moves) => {
     const half = Math.floor(moves.length / 2);
-    const separator = `+${'-'.repeat(colWidth + padding).repeat(moves.length + 1)}+\n`;
-    let table = `\n${separator}`;
 
-    // Header row
-    table += `| ${''.padEnd(colWidth)}|`;
-    moves.forEach(move => {
-        table += ` ${move.padEnd(colWidth)} |`;
+    // Create a new table
+    const table = new Table({
+        head: [''].concat(moves),
+        colWidths: Array(moves.length + 1).fill(20)
     });
-    table += `\n${separator}`;
 
-    // Each move row
+    // Fill the table with data
     moves.forEach((move, i) => {
-        let row = `| ${move.padEnd(colWidth)}|`;
+        const row = [move];
         moves.forEach((_, j) => {
             if (i === j) {
-                row += ` ${'Draw'.padEnd(colWidth)}|`;
+                row.push('Draw');
             } else if ((j > i && j - i <= half) || (i > j && i - j > half)) {
-                row += ` ${'Lose'.padEnd(colWidth)}|`;
+                row.push('Lose');
             } else {
-                row += ` ${'Win'.padEnd(colWidth)}|`;
+                row.push('Win');
             }
         });
-        row += `\n${separator}`;
-        table += row;
+        table.push(row);
     });
 
-    return table;
+    return table.toString();
 };
 
 // Available moves display
