@@ -8,9 +8,6 @@ const PrivateRoute = ({ adminOnly = false }) => {
     console.log('Auth is still loading...');
     return null; 
   }
-
-  console.log('Auth:', auth);
-  console.log('Admin check:', checkAdmin());
   
   if (!auth) {
     console.log('Redirecting to login because not authenticated');

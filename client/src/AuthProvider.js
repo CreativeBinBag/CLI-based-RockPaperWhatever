@@ -10,9 +10,7 @@ export const AuthProvider = ({ children }) => {
   
   const checkAuthStatus = async () => {
     try {
-      console.log('Checking auth status...');
       const response = await api.get('/api/users/check-auth-status', { withCredentials: true });
-      console.log('Auth status response:', response.data);
       setAuth({
         id: response.data.id,
         userName: response.data.userName,
@@ -39,7 +37,6 @@ export const AuthProvider = ({ children }) => {
     return null; 
   }
     
-  console.log("Check Auth has worked:", auth);
   const login = async (username, password) => {
     try {
       const response = await api.post('/api/users/login', {
@@ -47,7 +44,6 @@ export const AuthProvider = ({ children }) => {
         password,
       }, { withCredentials: true });
 
-      console.log('Login response:', response);
 
       if (response.status === 200) {
         setAuth(response.data);

@@ -6,7 +6,7 @@ const GameTerminal = () => {
     useEffect(() => {
         const ws = new WebSocket('wss://cli-based-rockpaperwhateverbackend-cmow.onrender.com');
         const terminal = new Terminal({
-            cols: 120, 
+            cols: 150, 
             rows: 120, 
             cursorBlink: true,
             fontFamily: 'monospace',
