@@ -4,15 +4,25 @@ const readline = require('readline');
 const moves = process.argv.slice(2);
 
 
-const terminalWidth = process.stdout.columns || 120;
-const padding = 2;
+const padding = 1; // Minimize padding to save space
+const totalColumns = moves.length + 1;
+const maxMoveLength = moves.reduce((max, move) => Math.max(max, move.length), 0);
 
-const totalPaddingAndBorders = (moves.length + 1) * padding + (moves.length + 1); 
-const availableWidth = terminalWidth - totalPaddingAndBorders;
-const colWidth = Math.min(
-    Math.floor(availableWidth / (moves.length + 1)),
-    moves.reduce((max, move) => Math.max(max, move.length), 0)
+// Calculate the minimum required column width
+const colWidth = Math.max(
+    Math.floor((terminalWidth - totalColumns * padding) / totalColumns),
+    maxMoveLength
 );
+
+// Ensure the table can fit within the terminal width
+if (colWidth * totalColumns + padding * totalColumns > terminalWidth) {
+    console.log("Table is too wide for this terminal width.");
+} else {
+    console.log("Table fits within the terminal width.");
+}
+
+console.log(`Terminal width: ${terminalWidth}, Column width: ${colWidth}`);
+
 // Generate a cryptographic key
 const key = crypto.randomBytes(32).toString('hex');
 
