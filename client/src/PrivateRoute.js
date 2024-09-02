@@ -14,7 +14,7 @@ const PrivateRoute = ({ adminOnly = false }) => {
   
   if (!auth) {
     console.log('Redirecting to login because not authenticated');
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
 
   if (adminOnly && !checkAdmin()) {

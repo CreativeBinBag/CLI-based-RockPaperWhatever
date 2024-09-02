@@ -102,7 +102,7 @@ const Register = () => {
   };
 
   return (
-    <Box component="section" sx={{ maxWidth: 400, mx: "auto", mt: 10, p: 3, boxShadow: 3, borderRadius: 2, backgroundColor: '#757575' }}>
+    <Box component="section" sx={{ maxWidth: 400, mx: "auto", mt: 10, p: 3, boxShadow: 3, borderRadius: 2 }}>
       {success ? (
         <Typography variant="h5" align="center">Success! <br /><Link to="/login">Sign In</Link></Typography>
       ) : (
