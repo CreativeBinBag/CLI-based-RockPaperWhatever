@@ -2,12 +2,11 @@ const crypto = require('crypto');
 const readline = require('readline');
 
 const moves = process.argv.slice(2);
+
+
 const terminalWidth = process.stdout.columns || 120;
 const padding = 2;
-
-// Calculate column width based on the longest move or result ("Win"/"Lose"/"Draw")
-const maxMoveLength = Math.max(...moves.map(move => move.length), 4); // 4 for "Draw"
-const colWidth = Math.min(Math.floor((terminalWidth - (moves.length + 1) * padding) / (moves.length + 1)), maxMoveLength + padding);
+const colWidth = Math.floor((terminalWidth - (moves.length + 1) * padding) / (moves.length + 1));
 
 // Generate a cryptographic key
 const key = crypto.randomBytes(32).toString('hex');
@@ -19,7 +18,7 @@ const computerMove = moves[Math.floor(Math.random() * moves.length)];
 const hmac = crypto.createHmac('sha256', key).update(computerMove).digest('hex');
 
 // Display the HMAC to the user
-console.log(`HMAC: ${hmac}`);
+console.log(`\nHMAC: ${hmac}`);
 
 const generateHelpTable = (moves) => {
     const half = Math.floor(moves.length / 2);
