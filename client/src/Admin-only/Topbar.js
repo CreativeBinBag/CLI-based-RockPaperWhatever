@@ -15,7 +15,7 @@ const Topbar = () => {
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
 
-          <Button sx={{backgroundColor: grey}}startIcon= {<LogoutOutlinedIcon />} onClick={handleLogout}>
+          <Button sx={{backgroundColor: '#424242'}}startIcon= {<LogoutOutlinedIcon />} onClick={handleLogout}>
                 Logout
               </Button>
         
