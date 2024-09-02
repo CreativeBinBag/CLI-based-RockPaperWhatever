@@ -3,14 +3,10 @@ const readline = require('readline');
 
 const moves = process.argv.slice(2);
 
+
 const terminalWidth = process.stdout.columns || 120;
 const padding = 2;
-
-// Determine the maximum word length
-const maxWordLength = moves.reduce((max, move) => Math.max(max, move.length), 0);
-
-// Set column width as the maximum of calculated width and the longest word
-const colWidth = Math.max(Math.floor((terminalWidth - (moves.length + 1) * padding) / (moves.length + 1)), maxWordLength);
+const colWidth = Math.floor((terminalWidth - (moves.length + 1) * padding) / (moves.length + 1));
 
 // Generate a cryptographic key
 const key = crypto.randomBytes(32).toString('hex');
@@ -30,7 +26,7 @@ const generateHelpTable = (moves) => {
     let table = `\n${separator}`;
 
     // Header row
-    table += `| ${''.padEnd(colWidth)} |`;
+    table += `| ${''.padEnd(colWidth)}|`;
     moves.forEach(move => {
         table += ` ${move.padEnd(colWidth)} |`;
     });
@@ -38,14 +34,14 @@ const generateHelpTable = (moves) => {
 
     // Each move row
     moves.forEach((move, i) => {
-        let row = `| ${move.padEnd(colWidth)} |`;
+        let row = `| ${move.padEnd(colWidth)}|`;
         moves.forEach((_, j) => {
             if (i === j) {
-                row += ` ${'Draw'.padEnd(colWidth)} |`;
+                row += ` ${'Draw'.padEnd(colWidth)}|`;
             } else if ((j > i && j - i <= half) || (i > j && i - j > half)) {
-                row += ` ${'Lose'.padEnd(colWidth)} |`;
+                row += ` ${'Lose'.padEnd(colWidth)}|`;
             } else {
-                row += ` ${'Win'.padEnd(colWidth)} |`;
+                row += ` ${'Win'.padEnd(colWidth)}|`;
             }
         });
         row += `\n${separator}`;
