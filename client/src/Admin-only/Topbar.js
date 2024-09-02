@@ -1,14 +1,21 @@
-import {Box} from "@mui/material";
-import { Link } from "react-router-dom";
+import {Box, Button} from "@mui/material";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 const Topbar = () => {
+
+  const {logout} = useContext(AuthContext);
+
+  const handleLogout = async () => {
+    await logout();
+   
+  };
 
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
 
-         <Link to="/logout" > Log Out </Link>
-          
-  
+          <Button startIcon= {<LogoutOutlinedIcon />} onClick={handleLogout}>
+                Logout
+              </Button>
+        
     </Box>
   );
 };
