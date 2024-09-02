@@ -4,6 +4,7 @@ const readline = require('readline');
 const moves = process.argv.slice(2);
 
 
+const terminalWidth = process.stdout.columns || 120;
 const padding = 1; // Minimize padding to save space
 const totalColumns = moves.length + 1;
 const maxMoveLength = moves.reduce((max, move) => Math.max(max, move.length), 0);
