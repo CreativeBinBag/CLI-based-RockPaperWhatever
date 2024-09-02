@@ -19,19 +19,19 @@ console.log(`HMAC: ${hmac}`);
 const generateHelpTable = (moves) => {
     const half = Math.floor(moves.length / 2);
     const colWidth = Math.max(...moves.map(m => m.length)) + 5; // Dynamic column width
-    const separator = `+${'-'.repeat(colWidth * (moves.length + 1))}+\n`;
+    const separator = `+${'-'.repeat(colWidth * (moves.length + 1) + (moves.length + 1))}+\n`;
     let table = `\n${separator}`;
 
     // Header row
     table += `| ${''.padEnd(colWidth)}|`;
     moves.forEach(move => {
-        table += ` ${move.padEnd(colWidth - 1)}|`;
+        table += ` ${move.padEnd(colWidth)}|`;
     });
     table += `\n${separator}`;
 
     // Each move row
     moves.forEach((move, i) => {
-        let row = `| ${move.padEnd(colWidth - 1)}|`;
+        let row = `| ${move.padEnd(colWidth)}|`;
         moves.forEach((_, j) => {
             if (i === j) {
                 row += ` ${'Draw'.padEnd(colWidth)}|`;
@@ -49,12 +49,12 @@ const generateHelpTable = (moves) => {
 };
 
 // Available moves display
-console.log("Available moves:");
+console.log("\nAvailable moves:\n");
 moves.forEach((move, index) => {
-    console.log(`${index + 1} - ${move}`);
+    console.log(`${index + 1} - ${move}\n`);
 });
-console.log("0 - exit");
-console.log("? - help table");
+console.log("0 - exit\n");
+console.log("? - help table\n");
 
 const rl = readline.createInterface({
     input: process.stdin,
