@@ -3,13 +3,15 @@ const readline = require('readline');
 
 const moves = process.argv.slice(2);
 
-
-const terminalWidth = process.stdout.columns || 120;
-const padding = 2;
-const colWidth = Math.max(
-    Math.floor((terminalWidth - (moves.length + 1) * padding) / (moves.length + 1)),
+const totalPaddingAndBorders = (moves.length + 1) * padding + (moves.length + 1); 
+const availableWidth = terminalWidth - totalPaddingAndBorders;
+const colWidth = Math.min(
+    Math.floor(availableWidth / (moves.length + 1)),
     moves.reduce((max, move) => Math.max(max, move.length), 0)
 );
+
+console.log(`Terminal width: ${terminalWidth}, Available width: ${availableWidth}, Calculated column width: ${colWidth}`);
+
 
 // Generate a cryptographic key
 const key = crypto.randomBytes(32).toString('hex');
