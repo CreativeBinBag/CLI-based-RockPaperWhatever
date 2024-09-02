@@ -6,8 +6,8 @@ const GameTerminal = () => {
     useEffect(() => {
         const ws = new WebSocket('wss://cli-based-rockpaperwhateverbackend-cmow.onrender.com');
         const terminal = new Terminal({
-            cols: 120, 
-            rows: 120, 
+            cols: 100, 
+            rows: 100, 
             cursorBlink: true,
             fontFamily: 'monospace',
             fontSize: 14,
@@ -40,7 +40,7 @@ const GameTerminal = () => {
                   if (!movesSent) {
                       ws.send(JSON.stringify({ type: 'moves', data: inputBuffer.split(',').map(m => m.trim()).filter(m => m.length > 0) }));
                       movesSent = true;
-                      terminal.writeln('Moves sent! Please enter your move (number) or type "?" for help:');
+                      terminal.write('Moves sent! Please enter your move (number) or type "?" for help:');
                   } else {
                       ws.send(JSON.stringify({ type: 'move', data: inputBuffer.trim() }));
                   }
