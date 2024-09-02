@@ -25,11 +25,11 @@ const PrivateRoute = ({ adminOnly = false }) => {
   }
 
   console.log('Rendering Outlet');
-  return   <>
-              <Outlet />
-              <ToastContainer />
+  return ( <>
+            <Outlet />
+            <ToastContainer />
           </>
-
+  )
 };
 
 export default PrivateRoute;
