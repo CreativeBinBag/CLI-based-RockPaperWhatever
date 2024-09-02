@@ -6,8 +6,8 @@ const GameTerminal = () => {
     useEffect(() => {
         const ws = new WebSocket('wss://cli-based-rockpaperwhateverbackend-cmow.onrender.com');
         const terminal = new Terminal({
-            cols: 150, 
-            rows: 120, 
+            cols: 200,
+            rows: 40,  
             cursorBlink: true,
             fontFamily: 'monospace',
             fontSize: 14,
@@ -27,8 +27,11 @@ const GameTerminal = () => {
         };
 
         ws.onmessage = (event) => {
-            terminal.writeln(event.data.trim() + '\r\n'); // Ensuring proper line endings
-        };
+          // Ensure proper line endings and handle terminal width
+          const formattedData = event.data.replace(/\r\n|\r|\n/g, '\r\n');
+          terminal.writeln(formattedData + '\r\n'); 
+      };
+      
 
         ws.onerror = (error) => {
             terminal.writeln(`WebSocket error: ${error.message}`);
