@@ -6,7 +6,10 @@ const moves = process.argv.slice(2);
 
 const terminalWidth = process.stdout.columns || 120;
 const padding = 2;
-const colWidth = Math.max(Math.floor((terminalWidth - (moves.length + 1) * padding) / (moves.length + 1)), moves.length); // Ensure minimum colWidth
+const colWidth = Math.max(
+    Math.floor((terminalWidth - (moves.length + 1) * padding) / (moves.length + 1)),
+    moves.reduce((max, move) => Math.max(max, move.length), 0)
+);
 
 // Generate a cryptographic key
 const key = crypto.randomBytes(32).toString('hex');
