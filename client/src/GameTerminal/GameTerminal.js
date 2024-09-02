@@ -11,6 +11,10 @@ const GameTerminal = () => {
             cursorBlink: true,
             fontFamily: 'monospace',
             fontSize: 14,
+            theme: {
+              background: '#1D1F21',
+              foreground: '#C5C8C6'
+            }
         });
         terminal.open(document.getElementById('terminal'));
 
