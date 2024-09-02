@@ -13,29 +13,31 @@ const computerMove = moves[Math.floor(Math.random() * moves.length)];
 const hmac = crypto.createHmac('sha256', key).update(computerMove).digest('hex');
 
 // Display the HMAC to the user
-console.log(`\nHMAC: ${hmac}`);
+console.log(`HMAC: ${hmac}`);
 
 const generateHelpTable = (moves) => {
     const half = Math.floor(moves.length / 2);
-    const colWidth = 10; // Adjust this width based on your longest move and padding needs
-    const separator = '+'.padEnd((colWidth + 1) * (moves.length + 1), '-') + '+\n';
+    const colWidth = Math.max(...moves.map(m => m.length)) + 5; // Dynamic column width
+    const separator = `+${'-'.repeat(colWidth * (moves.length + 1))}+\n`;
     let table = `\n${separator}`;
 
-    table += '|'.padEnd(colWidth + 1) + '|';
+    // Header row
+    table += `| ${''.padEnd(colWidth)}|`;
     moves.forEach(move => {
-        table += ` ${move.padEnd(colWidth - 2)}|`;
+        table += ` ${move.padEnd(colWidth - 1)}|`;
     });
     table += `\n${separator}`;
 
+    // Each move row
     moves.forEach((move, i) => {
-        let row = `| ${move.padEnd(colWidth - 2)}|`;
+        let row = `| ${move.padEnd(colWidth - 1)}|`;
         moves.forEach((_, j) => {
             if (i === j) {
-                row += ` Draw     |`;
+                row += ` ${'\x1b[33mDraw\x1b[0m'.padEnd(colWidth)}|`;
             } else if ((j > i && j - i <= half) || (i > j && i - j > half)) {
-                row += ` Lose     |`;
+                row += ` ${'\x1b[31mLose\x1b[0m'.padEnd(colWidth)}|`;
             } else {
-                row += ` Win      |`;
+                row += ` ${'\x1b[32mWin\x1b[0m'.padEnd(colWidth)}|`;
             }
         });
         row += `\n${separator}`;
@@ -46,12 +48,12 @@ const generateHelpTable = (moves) => {
 };
 
 // Available moves display
-console.log("\nAvailable moves:");
+console.log("Available moves:");
 moves.forEach((move, index) => {
     console.log(`${index + 1} - ${move}`);
 });
-console.log("\n0 - exit");
-console.log("\n? - help table");
+console.log("0 - exit");
+console.log("? - help table");
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -73,23 +75,23 @@ rl.on('line', (input) => {
             const computerIndex = moves.indexOf(computerMove);
             const half = Math.floor(moves.length / 2);
 
-            console.log(`\nYour move: ${userMove}`);
-            console.log(`\nComputer move: ${computerMove}`);
+            console.log(`Your move: ${userMove}`);
+            console.log(`Computer move: ${computerMove}`);
 
             if (userIndex === computerIndex) {
-                console.log("\nIt's a draw!");
+                console.log("It's a draw!");
             } else if ((computerIndex > userIndex && computerIndex - userIndex <= half) ||
                 (userIndex > computerIndex && userIndex - computerIndex > half)) {
-                console.log("\nComputer Wins!");
+                console.log("Computer Wins!");
             } else {
-                console.log("\nYou Win!");
+                console.log("You Win!");
             }
 
-            console.log(`\nHMAC key: ${key}`);
+            console.log(`HMAC key: ${key}`);
             rl.close();
             process.exit(0);
         } else {
-            console.log("\nInvalid input. Please select a valid move.");
+            console.log("Invalid input. Please select a valid move.");
         }
     }
 });
