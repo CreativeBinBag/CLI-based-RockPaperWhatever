@@ -1,11 +1,11 @@
 const crypto = require('crypto');
 const readline = require('readline');
+const moves = process.argv.slice(2);
+
 
 const terminalWidth = process.stdout.columns || 120;
 const padding = 2;
 const colWidth = Math.floor((terminalWidth - (moves.length + 1) * padding) / (moves.length + 1));
-
-const moves = process.argv.slice(2);
 
 // Generate a cryptographic key
 const key = crypto.randomBytes(32).toString('hex');
