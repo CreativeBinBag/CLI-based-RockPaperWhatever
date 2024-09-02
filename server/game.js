@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const readline = require('readline');
 
+// Validate the moves passed as command line arguments
 const moves = process.argv.slice(2);
 
 // Generate a cryptographic key
@@ -33,11 +34,11 @@ const generateHelpTable = (moves) => {
         let row = `| ${move.padEnd(colWidth - 1)}|`;
         moves.forEach((_, j) => {
             if (i === j) {
-                row += ` ${'\x1b[33mDraw\x1b[0m'.padEnd(colWidth)}|`;
+                row += ` ${'Draw'.padEnd(colWidth)}|`;
             } else if ((j > i && j - i <= half) || (i > j && i - j > half)) {
-                row += ` ${'\x1b[31mLose\x1b[0m'.padEnd(colWidth)}|`;
+                row += ` ${'Lose'.padEnd(colWidth)}|`;
             } else {
-                row += ` ${'\x1b[32mWin\x1b[0m'.padEnd(colWidth)}|`;
+                row += ` ${'Win'.padEnd(colWidth)}|`;
             }
         });
         row += `\n${separator}`;
@@ -62,7 +63,7 @@ const rl = readline.createInterface({
 
 rl.on('line', (input) => {
     if (input === '0') {
-        console.log('\nExiting game...');
+        console.log('Exiting game...');
         rl.close();
         process.exit(0);
     } else if (input === '?') {
