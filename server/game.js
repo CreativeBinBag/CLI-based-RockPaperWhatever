@@ -71,7 +71,7 @@ rl.on('line', (input) => {
             const computerIndex = moves.indexOf(computerMove);
             const half = Math.floor(moves.length / 2);
 
-            console.log(`Your move: ${userMove}`);
+            console.log(`\nYour move: ${userMove}`);
             console.log(`Computer move: ${computerMove}`);
 
             if (userIndex === computerIndex) {
