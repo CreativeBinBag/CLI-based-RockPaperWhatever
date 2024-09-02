@@ -5,8 +5,8 @@ const moves = process.argv.slice(2);
 
 
 const terminalWidth = process.stdout.columns || 120;
-const padding = 2;
-const colWidth = Math.floor((terminalWidth - (moves.length + 1) * padding) / (moves.length + 1));
+const padding = 3;
+const colWidth = Math.max(Math.floor((terminalWidth - (moves.length + 1) * padding) / (moves.length + 1)), moves.length);
 
 // Generate a cryptographic key
 const key = crypto.randomBytes(32).toString('hex');
