@@ -5,7 +5,6 @@ const moves = process.argv.slice(2);
 
 const terminalWidth = process.stdout.columns || 120;
 const padding = 2;
-const colWidth = Math.floor((terminalWidth - (moves.length + 1) * padding) / (moves.length + 1));
 
 // Generate a cryptographic key
 const key = crypto.randomBytes(32).toString('hex');
@@ -21,26 +20,33 @@ console.log(`HMAC: ${hmac}`);
 
 const generateHelpTable = (moves) => {
     const half = Math.floor(moves.length / 2);
-    const separator = `+${'-'.repeat(colWidth + padding).repeat(moves.length + 1)}+\n`;
+    
+    // Adjust the separator width to align with terminal width
+    const totalWidth = terminalWidth - padding * (moves.length + 1);
+    const colWidth = Math.max(Math.floor(totalWidth / (moves.length + 1)), 7); // Ensuring a minimum width
+
+    // Create the separator line dynamically based on column width and number of columns
+    const separator = `+${'-'.repeat(colWidth + padding)}+`.repeat(moves.length + 1) + '\n';
+
     let table = `\n${separator}`;
 
-    // Header row
-    table += `| ${''.padEnd(colWidth)}|`;
+    // Header row with aligned columns
+    table += `| ${''.padEnd(colWidth)} |`;  // Empty top-left corner
     moves.forEach(move => {
         table += ` ${move.padEnd(colWidth)} |`;
     });
     table += `\n${separator}`;
 
-    // Each move row
+    // Rows for each move
     moves.forEach((move, i) => {
-        let row = `| ${move.padEnd(colWidth)}|`;
+        let row = `| ${move.padEnd(colWidth)} |`;  // Row header
         moves.forEach((_, j) => {
             if (i === j) {
-                row += ` ${'Draw'.padEnd(colWidth)}|`;
+                row += ` ${'Draw'.padEnd(colWidth)} |`;
             } else if ((j > i && j - i <= half) || (i > j && i - j > half)) {
-                row += ` ${'Lose'.padEnd(colWidth)}|`;
+                row += ` ${'Lose'.padEnd(colWidth)} |`;
             } else {
-                row += ` ${'Win'.padEnd(colWidth)}|`;
+                row += ` ${'Win'.padEnd(colWidth)} |`;
             }
         });
         row += `\n${separator}`;
@@ -49,6 +55,7 @@ const generateHelpTable = (moves) => {
 
     return table;
 };
+
 
 // Available moves display
 console.log("\nAvailable moves:\n");
