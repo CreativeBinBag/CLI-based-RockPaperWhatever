@@ -1,9 +1,7 @@
 const crypto = require('crypto');
 const readline = require('readline');
 
-// Validate the moves passed as command line arguments
 const moves = process.argv.slice(2);
-
 
 // Generate a cryptographic key
 const key = crypto.randomBytes(32).toString('hex');
@@ -20,10 +18,10 @@ console.log(`HMAC: ${hmac}`);
 const generateHelpTable = (moves) => {
     const half = Math.floor(moves.length / 2);
     const colWidth = 10; // Adjust this width based on your longest move and padding needs
-    const separator = '+----------'.repeat(moves.length + 1) + '+\n';
+    const separator = '+'.padEnd((colWidth + 1) * (moves.length + 1), '-') + '+\n';
     let table = `\n${separator}`;
 
-    table += '|          |';
+    table += '|'.padEnd(colWidth + 1) + '|';
     moves.forEach(move => {
         table += ` ${move.padEnd(colWidth - 2)}|`;
     });
@@ -46,8 +44,6 @@ const generateHelpTable = (moves) => {
 
     return table;
 };
-
-
 
 // Available moves display
 console.log("Available moves:");
