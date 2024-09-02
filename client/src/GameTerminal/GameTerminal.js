@@ -27,7 +27,6 @@ const GameTerminal = () => {
         };
 
         ws.onmessage = (event) => {
-          // Ensure proper line endings and handle terminal width
           const formattedData = event.data.replace(/\r\n|\r|\n/g, '\r\n');
           terminal.writeln(formattedData + '\r\n'); 
       };
