@@ -13,7 +13,7 @@ const computerMove = moves[Math.floor(Math.random() * moves.length)];
 const hmac = crypto.createHmac('sha256', key).update(computerMove).digest('hex');
 
 // Display the HMAC to the user
-console.log(`HMAC: ${hmac}`);
+console.log(`\nHMAC: ${hmac}`);
 
 const generateHelpTable = (moves) => {
     const half = Math.floor(moves.length / 2);
@@ -46,12 +46,12 @@ const generateHelpTable = (moves) => {
 };
 
 // Available moves display
-console.log("Available moves:");
+console.log("\nAvailable moves:");
 moves.forEach((move, index) => {
     console.log(`${index + 1} - ${move}`);
 });
-console.log("0 - exit");
-console.log("? - help table");
+console.log("\n0 - exit");
+console.log("\n? - help table");
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -60,7 +60,7 @@ const rl = readline.createInterface({
 
 rl.on('line', (input) => {
     if (input === '0') {
-        console.log('Exiting game...');
+        console.log('\nExiting game...');
         rl.close();
         process.exit(0);
     } else if (input === '?') {
@@ -73,23 +73,23 @@ rl.on('line', (input) => {
             const computerIndex = moves.indexOf(computerMove);
             const half = Math.floor(moves.length / 2);
 
-            console.log(`Your move: ${userMove}`);
-            console.log(`Computer move: ${computerMove}`);
+            console.log(`\nYour move: ${userMove}`);
+            console.log(`\nComputer move: ${computerMove}`);
 
             if (userIndex === computerIndex) {
-                console.log("It's a draw!");
+                console.log("\nIt's a draw!");
             } else if ((computerIndex > userIndex && computerIndex - userIndex <= half) ||
                 (userIndex > computerIndex && userIndex - computerIndex > half)) {
-                console.log("Computer Wins!");
+                console.log("\nComputer Wins!");
             } else {
-                console.log("You Win!");
+                console.log("\nYou Win!");
             }
 
-            console.log(`HMAC key: ${key}`);
+            console.log(`\nHMAC key: ${key}`);
             rl.close();
             process.exit(0);
         } else {
-            console.log("Invalid input. Please select a valid move.");
+            console.log("\nInvalid input. Please select a valid move.");
         }
     }
 });
