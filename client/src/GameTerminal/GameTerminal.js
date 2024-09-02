@@ -35,27 +35,29 @@ const GameTerminal = () => {
         };
 
         terminal.onData(data => {
-            if (data.charCodeAt(0) === 13) { // Enter key
-                if (inputBuffer.trim()) {
-                    if (!movesSent) {
-                        ws.send(JSON.stringify({ type: 'moves', data: inputBuffer.split(',').map(m => m.trim()).filter(m => m.length > 0) }));
-                        movesSent = true;
-                        terminal.writeln('Moves sent! Please enter your move (number) or type "?" for help:');
-                    } else {
-                        ws.send(JSON.stringify({ type: 'move', data: inputBuffer.trim() }));
-                    }
-                    inputBuffer = '';
-                }
-            } else if (data.charCodeAt(0) === 8) { // Backspace
-                if (inputBuffer.length > 0) {
-                    inputBuffer = inputBuffer.slice(0, -1);
-                    terminal.write('\b \b');
-                }
-            } else {
-                inputBuffer += data;
-                terminal.write(data);
-            }
-        });
+          if (data.charCodeAt(0) === 13) { // Enter key
+              if (inputBuffer.trim()) {
+                  if (!movesSent) {
+                      ws.send(JSON.stringify({ type: 'moves', data: inputBuffer.split(',').map(m => m.trim()).filter(m => m.length > 0) }));
+                      movesSent = true;
+                      terminal.writeln('Moves sent! Please enter your move (number) or type "?" for help:');
+                  } else {
+                      ws.send(JSON.stringify({ type: 'move', data: inputBuffer.trim() }));
+                  }
+                  inputBuffer = '';
+              }
+          } else if (data.charCodeAt(0) === 127) { // Backspace key
+              if (inputBuffer.length > 0) {
+                  inputBuffer = inputBuffer.slice(0, -1);
+                  terminal.write('\b \b');
+              }
+          } else {
+              inputBuffer += data;
+              terminal.write(data);
+          }
+      });
+      
+
 
         return () => {
             ws.close();
