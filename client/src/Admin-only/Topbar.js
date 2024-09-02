@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import {Box, Button} from "@mui/material";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { AuthContext } from "../AuthProvider";
