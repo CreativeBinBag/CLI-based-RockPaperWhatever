@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import { Box } from '@mui/material';
-import Button from '@mui/material';
+import {Button} from '@mui/material';
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { AuthContext } from '../AuthProvider';
 import { Terminal } from 'xterm';
