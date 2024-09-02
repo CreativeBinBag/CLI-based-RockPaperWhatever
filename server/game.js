@@ -1,10 +1,12 @@
 const crypto = require('crypto');
 const readline = require('readline');
+
 const moves = process.argv.slice(2);
 
 
 const terminalWidth = process.stdout.columns || 120;
 const padding = 2;
+const colWidth = Math.floor((terminalWidth - (moves.length + 1) * padding) / (moves.length + 1));
 
 // Generate a cryptographic key
 const key = crypto.randomBytes(32).toString('hex');
@@ -16,37 +18,30 @@ const computerMove = moves[Math.floor(Math.random() * moves.length)];
 const hmac = crypto.createHmac('sha256', key).update(computerMove).digest('hex');
 
 // Display the HMAC to the user
-console.log(`HMAC: ${hmac}`);
+console.log(`\nHMAC: ${hmac}`);
 
 const generateHelpTable = (moves) => {
     const half = Math.floor(moves.length / 2);
-    
-    // Adjust the separator width to align with terminal width
-    const totalWidth = terminalWidth - padding * (moves.length + 1);
-    const colWidth = Math.max(Math.floor(totalWidth / (moves.length + 1)), 7); // Ensuring a minimum width
-
-    // Create the separator line dynamically based on column width and number of columns
-    const separator = `+${'-'.repeat(colWidth + padding)}+`.repeat(moves.length + 1) + '\n';
-
+    const separator = `+${'-'.repeat(colWidth + padding).repeat(moves.length + 1)}+\n`;
     let table = `\n${separator}`;
 
-    // Header row with aligned columns
-    table += `| ${''.padEnd(colWidth)} |`;  // Empty top-left corner
+    // Header row
+    table += `| ${''.padEnd(colWidth)}|`;
     moves.forEach(move => {
         table += ` ${move.padEnd(colWidth)} |`;
     });
     table += `\n${separator}`;
 
-    // Rows for each move
+    // Each move row
     moves.forEach((move, i) => {
-        let row = `| ${move.padEnd(colWidth)} |`;  // Row header
+        let row = `| ${move.padEnd(colWidth)}|`;
         moves.forEach((_, j) => {
             if (i === j) {
-                row += ` ${'Draw'.padEnd(colWidth)} |`;
+                row += ` ${'Draw'.padEnd(colWidth)}|`;
             } else if ((j > i && j - i <= half) || (i > j && i - j > half)) {
-                row += ` ${'Lose'.padEnd(colWidth)} |`;
+                row += ` ${'Lose'.padEnd(colWidth)}|`;
             } else {
-                row += ` ${'Win'.padEnd(colWidth)} |`;
+                row += ` ${'Win'.padEnd(colWidth)}|`;
             }
         });
         row += `\n${separator}`;
@@ -55,7 +50,6 @@ const generateHelpTable = (moves) => {
 
     return table;
 };
-
 
 // Available moves display
 console.log("\nAvailable moves:\n");
