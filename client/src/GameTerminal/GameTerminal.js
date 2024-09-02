@@ -1,21 +1,10 @@
-import React, { useEffect, useContext } from 'react';
-import { Box } from '@mui/material';
-import {Button} from '@mui/material';
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import { AuthContext } from '../AuthProvider';
+import React, { useEffect } from 'react';
 import { Terminal } from 'xterm';
 import {FitAddon} from 'xterm-addon-fit';
 import 'xterm/css/xterm.css';
 
 const GameTerminal = () => {
-
-  const {logout} = useContext(AuthContext);
-
-  const handleLogout = async () => {
-    await logout();
-   
-  };
-
+  
   useEffect(() => {
     const ws = new WebSocket('wss://cli-based-rockpaperwhateverbackend-cmow.onrender.com');
 
@@ -80,11 +69,7 @@ const GameTerminal = () => {
     };
   }, []);
 
-  return (<Box className="terminal" style={{ width: '100%', height: '500px' }}>
-            <Button sx={{backgroundColor: '#424242'}}startIcon= {<LogoutOutlinedIcon />} onClick={handleLogout}>
-            Logout
-          </Button>
-        </Box> )
+  return <div id="terminal" style={{ width: '100%', height: '500px' }} />;
 };
 
 export default GameTerminal;
