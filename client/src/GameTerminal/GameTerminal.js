@@ -46,7 +46,7 @@ const GameTerminal = () => {
           if (!movesSent) {
             ws.send(JSON.stringify({ type: 'moves', data: inputBuffer.split(',').map(m => m.trim()).filter(m => m.length > 0) }));
             movesSent = true;
-            terminal.writeln('Moves sent! Please enter your move (number) or type "?" for help:');
+            terminal.write('\nMoves sent! Please enter your move (number) or type "?" for help:');
           } else {
             ws.send(JSON.stringify({ type: 'move', data: inputBuffer.trim() }));
           }
